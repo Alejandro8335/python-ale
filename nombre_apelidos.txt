@@ -1,0 +1,17 @@
+los datos son:
+
+nombre: ale
+apellidos: dominguez
+-------------
+nombre: alex
+apellidos: dalto
+-------------
+nombre: alexandre
+apellidos: zing
+-------------
+nombre: alejandro
+apellidos: papa
+-------------
+nombre: alejo
+apellidos: pa
+-------------

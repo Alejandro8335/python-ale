@@ -1,0 +1,7 @@
+
+fuente,ingresos
+trabajo fijo, 3000
+freelance, 800
+YouTube regalías, 350
+influencer, 600
+cripto, 150

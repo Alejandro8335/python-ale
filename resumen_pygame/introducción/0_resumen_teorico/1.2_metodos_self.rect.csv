@@ -1,0 +1,20 @@
+,,
+Propiedad,¿Qué devuelve?,¿Para qué sirve?
+self.rect.x,Coordenada X (izquierda),Posición horizontal (en píxeles)
+self.rect.y,Coordenada Y (arriba),Posición vertical (en píxeles)
+self.rect.width,Ancho del rectángulo,Tamaño horizontal
+self.rect.height,Alto del rectángulo,Tamaño vertical
+self.rect.top,Y del borde superior,Para alinear por arriba
+self.rect.bottom,Y del borde inferior,Para verificar colisiones por abajo
+self.rect.left,X del borde izquierdo,Para alinear por la izquierda
+self.rect.right,X del borde derecho,Para alinear por la derecha
+self.rect.center,"(x, y) del centro del rectángulo",Centrar objetos fácilmente
+self.rect.midtop,"Centro del borde superior (x, y)",Colocar justo arriba de algo
+self.rect.topleft,"(x, y) de la esquina superior izquierda",Para posicionar de forma precisa
+self.rect.colliderect(otro_rect),True o False si colisiona con otro rectángulo,Detectar colisiones
+,,
+,,
+self.rect.left,int → coordenada del borde izquierdo,X mínima del rectángulo
+self.rect.right,int → coordenada del borde derecho,X máxima (izquierda + ancho)
+self.rect.top,int → coordenada del borde superior,Y mínima del rectángulo
+self.rect.bottom,int → coordenada del borde inferior,Y máxima (arriba + alto)

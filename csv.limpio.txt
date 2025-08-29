@@ -1,0 +1,4 @@
+,nombre,apellido,edad
+0,maestro,dominguez,15.0
+1,lucas,dalto,24.0
+2,camila,dalto,36.0

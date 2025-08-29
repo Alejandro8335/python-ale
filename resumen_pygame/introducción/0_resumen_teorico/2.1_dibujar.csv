@@ -1,0 +1,5 @@
+Situación,Usá blit(),Usá pygame.draw
+Mostrar un sprite,si,no
+Dibujar un rectángulo rojo,no,si
+Renderizar texto,si (con font.render()),no
+Crear HUD con formas,no,si

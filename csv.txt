@@ -1,0 +1,7 @@
+"nombre","apellido","edad"
+"ale","dominguez",15
+"lucas","dalto",24
+"camila","dalto",36
+"falta",
+"camila","dalto",36
+
