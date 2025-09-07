@@ -46,3 +46,10 @@ if ingreso_mensual > 10000:
 #Estructura	|¿Evalúa múltiples condiciones si todas son verdaderas?
 #Varios if	|✅ Sí
 #if + elif	|❌ No, solo la primera verdadera
+
+#max y min
+max(3, 7, 1)
+7
+
+min([10, 4, 15, 2])
+2

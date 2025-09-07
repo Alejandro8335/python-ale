@@ -1,7 +1,7 @@
 import machine
 import time
 
-pin = machine.Pin(2, machine.Pin.OUT)# 2 es el de la esp32
+pin = machine.Pin(15, machine.Pin.OUT)# 2 es el de la esp32
 
 for i in range(5):
     #pin.value(1)

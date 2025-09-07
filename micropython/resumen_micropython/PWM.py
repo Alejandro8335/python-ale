@@ -33,4 +33,18 @@ while True:
     except Exception as e:
         print(f"\033[31m{e}\033[0m")
         
-    
+#¿Qué es PWM?
+#PWM (Pulse Width Modulation) es una técnica donde generamos una señal digital que oscila entre alto y bajo a una frecuencia fija.
+
+#Cada ciclo dura el mismo tiempo (por ejemplo, 20 ms en un servo de 50 Hz), pero la parte “alta” del ciclo puede variar en duración.
+
+#Al cambiar solo el ancho del pulso (sin tocar la frecuencia), controlamos dispositivos como servos, LEDs y motores con precisión.
+
+#¿Qué es “duty” o ciclo de trabajo?
+#El “duty” (valor de duty cycle) indica qué porcentaje del ciclo total la señal está en alto.
+
+#Si el duty es 0 % → siempre en bajo
+#Si el duty es 50 % → mitad del tiempo en alto, mitad en bajo
+#Si el duty es 100 % → siempre en alto
+
+#En MicroPython para ESP32, ese porcentaje se expresa como un número entre 0 y 1023 (10 bits).

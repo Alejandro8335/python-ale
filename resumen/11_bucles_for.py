@@ -6,7 +6,7 @@ for animal in animales:
     print(animal)
 
 #recorriendo la lista y multiplicando cada valor por 10
-numeros =[1,2,3,4]
+numeros = [1,2,3,4]
 for numero in numeros:
     resultado = numero *2
     print(resultado)
