@@ -1,5 +1,5 @@
 #abrimos el archivo
-archivo = open("C:/Users/gabri/OneDrive/Desktop/ALE/python=ale/ale.txt")
+archivo = open("C:/Users/gabri/OneDrive/Desktop/ALE/python-ale/ale.txt")
 #print(archivo.read())                                             
 
 #leer linea por linea

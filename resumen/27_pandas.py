@@ -1,6 +1,6 @@
 
 import pandas as pd
-df = pd.read_csv("C:/Users/gabri/OneDrive/Desktop/ALE/python=ale/csv.txt")#names = ["nombre","apellido","edad"]
+df = pd.read_csv("C:/Users/gabri/OneDrive/Desktop/ALE/python-ale/csv.txt")#names = ["nombre","apellido","edad"]
 
 nombre = df["nombre"] 
 

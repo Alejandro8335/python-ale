@@ -1,6 +1,6 @@
 from machine import Pin,PWM
 
-led = PWM(Pin(32))
+led = PWM(Pin(15))
 led.freq(90)
 #led.duty(511 )#0% = 0 y 100% = 1023
 
