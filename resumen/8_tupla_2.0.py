@@ -1,4 +1,3 @@
-
 #combirtiendo una lista en una tupla
 tupla = tuple(["ale","dominguez","leon"])
 
@@ -7,4 +6,4 @@ tupla1 = "dato1","dato1.2"
 
 #creando una tupla con un solo dato
 tupla2 = "dato2",
-print(tupla2)
+print(tupla1)

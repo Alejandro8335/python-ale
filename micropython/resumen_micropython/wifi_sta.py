@@ -14,4 +14,3 @@ while not sta_if.isconnected():
 
 print("Conectado, configuración de red:", sta_if.ifconfig())
 
-
