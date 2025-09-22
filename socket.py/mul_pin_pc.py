@@ -9,22 +9,25 @@ ESP32_IP = "192.168.100.219"
 ESP32_PORT = 8080
 
 connect = False
-client = True
+client = False
 def Connect():
-    global connect,client_socket,client
+    global connect, client_socket, client
     try:
-        if not client:
-            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            client = True
-        if not connect:
-            client_socket.connect((ESP32_IP, ESP32_PORT))
-            label_state.config(text="connect")
-            connect = True
-        
-        
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_socket.settimeout(5)  # evita bloqueos largos
+        client_socket.connect((ESP32_IP, ESP32_PORT))
+        label_state.config(text="connect")
+        connect = True
+        client = True
+    except socket.timeout:
+        label_error.config(text="Tiempo de conexión agotado")
+        connect = False
+        client = False
     except Exception as e:
-        label_error.config(text=e)
-        
+        label_error.config(text=f"Error: {e}")
+        connect = False
+        client = False
+
 def Disconnect():
     global connect,client
     try:
@@ -32,29 +35,30 @@ def Disconnect():
             label_state.config(text="disconnect")
             connect = False 
             client = False
+        if client:
             client_socket.close()
     except Exception as e:
         label_error.config(text=e)
 
 def Pack_entry():
     global connect
-    if not connect:
-        Connect()
     try:
+        if not connect:
+            Connect()
         E_def = int(entry_def.get())
         E_Pin = int(entry_Pin.get())
         E_number = int(entry_number.get())  
         exists_Pin = False
         exists_def = False
         exists_number = True
-        for i in [1,3,4,5,12,13,14,16,17,18,19,21,22,23,25,26,27,32,33]:
+        for i in [1,2,3,4,5,12,13,14,16,17,18,19,21,22,23,25,26,27,32,33]:
             if E_Pin == i:
                 exists_Pin = True
         if  exists_Pin:
-            match E_def:
+             match E_def:
                 case 1:
                     exists_def = True
-                    if  not (E_number == 1 or E_number == 0):
+                    if E_number not in (1,0):
                         label_error.config(text="The number you entered is not valid for this function; only the values 1 or 0.")
                         exists_number = False
                 case 2:
@@ -62,45 +66,44 @@ def Pack_entry():
                     if not (0 <= E_number <= 1023):
                         label_error.config(text="The number you entered is not valid for this function; the PWM value range is from 0 to 1023.")
                         exists_number = False
+                    if E_Pin == 2:
+                        label_error.config(text="Pin 2 does not have PWM.")
+                        exists_Pin = False
                 case _:
                     label_error.config(text="The function does not exist,1/value or 2/PWM")
-            
-            if exists_def and exists_number:
-                tupla = str(tuple([E_def,E_Pin,E_number]))
-                client_socket.send(tupla.encode())
-                label_error.config(text="package sent")
                 
+        if exists_def and exists_number:
+            tupla = str(tuple([E_def,E_Pin,E_number]))
+            client_socket.send(tupla.encode())
+            label_error.config(text="package sent")
+                    
         else:
             label_error.config(text="The Pin does not exist")
-            
+                
     except Exception as e:
-        label_error.config(text=e)
-        
-buffer = ""
-def Input_esp():
-    global buffer,connect
-    if connect:
-        try:
-            data = client_socket.recv(64).decode()
-            objeto, numero = data
-            buffer += data
-            # Mientras haya líneas completas en buffer…
-            while "\n" in buffer:
-                line, buffer = buffer.split("\n", 1)
-                if not line:
-                    continue
-                try:
-                    objeto, numero = ast.literal_eval(line)
-                    # Aquí procesás `objeto` y `numero`
-                    print("Recibí:", objeto, numero)
-                except Exception as e:
-                    print("Error parseando:", repr(line), e)
-        except BlockingIOError:
-            # No hay datos en este ciclo, seguimos
-            pass
+            label_error.config(text=e)
 
-        # vuelvo a llamar tras 50 ms sin bloquear la GUI
-        ventana.after(50, Input_esp)
+buffer = ""      
+def Input_esp():
+    global buffer, connect, client_socket
+    if connect and client_socket:
+        try:
+            data = client_socket.recv(64)
+            if data:
+                buffer += data.decode()
+                while "\n" in buffer:
+                    line, buffer = buffer.split("\n", 1)
+                    if line.strip():
+                        tupla = ast.literal_eval(line)
+                        print("Recibido:", tupla)
+        except TimeoutError:
+            # No llegaron datos en el tiempo límite, seguimos sin error
+            pass
+        except Exception as e:
+            label_error.config(text=f"Error de recepción: {e}")
+            connect = False
+    ventana.after(1000, Input_esp)
+    
 import tkinter as tk
 
 ventana = tk.Tk()
@@ -137,5 +140,5 @@ label_input_hcsr04 = tk.Label(ventana,text="input hcsr04")
 label_input_button.grid(row=3,column=0,padx=5,pady=5)
 label_input_hcsr04.grid(row=3,column=1,padx=5,pady=5)
 
-ventana.after(50, Input_esp)
+ventana.after(1000, Input_esp)
 ventana.mainloop()
