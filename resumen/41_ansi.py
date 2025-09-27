@@ -29,3 +29,20 @@ Normal = "\033[0m"
 
 #convinando colores
 print("\033[33mhola \033[32mmundo\033[0m")
+
+# \1, \2, \3 → son caracteres de control ASCII (códigos 1, 2 y 3).
+
+# ASCII 1 → ☺
+
+# ASCII 2 → ☻
+
+# ASCII 3 → ♥
+
+# ASCII 4 → ♦
+
+# ASCII 5 → ♣
+
+# ASCII 6 → ♠
+
+#cada numero devuelve un caracter diferente
+print("\5")

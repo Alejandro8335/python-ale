@@ -57,6 +57,11 @@ resultado8= False | True #true
 resultado9=not True #false
 resultado10=not False #true
 
+#reglas de preferencia,siempre es recomendable usar paréntesis:
+# not
+# and
+# or
+
 print(resultado10)
 
 #MAS

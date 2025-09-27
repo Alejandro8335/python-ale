@@ -14,7 +14,7 @@ def Connect():
     global connect, client_socket, client
     try:
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_socket.settimeout(5)  # evita bloqueos largos
+        client_socket.settimeout(5)  # evita bloqueos largos 
         client_socket.connect((ESP32_IP, ESP32_PORT))
         label_state.config(text="connect")
         connect = True
