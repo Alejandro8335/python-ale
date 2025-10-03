@@ -15,7 +15,7 @@ entrada.pack()
 etiqueta = tk.Label(ventana)
 etiqueta.pack()
 
-def Update_Label(*args):
+def Update_Label(args):
     etiqueta.config(text=stringvar.get())
 
 stringvar.trace("w",Update_Label)

@@ -19,7 +19,7 @@ opcion_1.pack()
 etiqueta = tk.Label(ventana)
 etiqueta.pack()
 
-def Update(*args):
+def Update(args):
     etiqueta.config(text=intvar.get())
     
 intvar.trace("w",Update)

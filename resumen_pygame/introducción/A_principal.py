@@ -23,7 +23,7 @@ def escalar_img(imagen,ancho,alto):
 
 animaciones = []
 for i in range(2):
-    img = pygame.image.load(f"C:/Users/gabri/OneDrive/Desktop/ALE/python=ale/resumen_pygame/introducción/imagenes/personaje/player_{i}.png").convert_alpha()
+    img = pygame.image.load(f"C:/Users/gabri/OneDrive/Desktop/ALE/python-ale/resumen_pygame/introducción/imagenes/personaje/player_{i}.png").convert_alpha()
     img = escalar_img(img,constantes.ANCHO_PERSONAJE,constantes.ALTO_PERSONAJE)
     animaciones.append(img)
 
@@ -37,13 +37,13 @@ def Nombre(directorio):
     return os.listdir(directorio)
 
 #enemigos
-dirrectorio_enegigos = r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ale\\resumen_pygame\\introducción\\imagenes\\enemigo"
+dirrectorio_enegigos = r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introducción\\imagenes\\enemigo"
 tipos_enemigos = Nombre(dirrectorio_enegigos)
 animaciones_enemigos = []
 
 for eni in tipos_enemigos:
     lista_temp = []
-    ruta_temp = f"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ale\\resumen_pygame\\introducción\\imagenes\\enemigo\\{eni}"
+    ruta_temp = f"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introducción\\imagenes\\enemigo\\{eni}"
     num_animaciones = Contar(ruta_temp)
     for i in range(num_animaciones):
         img_enemigo = pygame.image.load(f"{ruta_temp}\\{i+1}.png").convert_alpha()
@@ -67,25 +67,25 @@ lista_enemigos.append(Espinaria_2)
 #print(lista_enemigos)
 
 #imagenes arco
-img_arco = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\imagenes\\armas\\arco.png").convert_alpha()
+img_arco = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\armas\\arco.png").convert_alpha()
 img_arco_escalado = escalar_img(img_arco, constantes.ANCHO_ARMA, constantes.ALTO_ARMA)
 
 #imagenes de la balas
-img_balas = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\imagenes\\armas\\flecha.png").convert_alpha()
+img_balas = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\armas\\flecha.png").convert_alpha()
 img_balas_escalado = escalar_img(img_balas, 35, 16)
 
 #creando un arma de la clase weapon
 arco = Weapon(img_arco_escalado,img_balas_escalado)
 
 #carga imagenes de los items
-pocion = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\items\\posion.png").convert_alpha()
+pocion = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\posion.png").convert_alpha()
 pocion = escalar_img(pocion,constantes.ANCHO_POCION,constantes.ALTO_POCION)
 
 monedas_images = []
-ruta_monedas = r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\items\\moneda_"
+ruta_monedas = r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\moneda_"
 num_monedas = 4
 for i in range(num_monedas):
-    img = pygame.image.load(fr"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\items\\moneda_{i}.png").convert_alpha()
+    img = pygame.image.load(fr"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\moneda_{i}.png").convert_alpha()
     img = escalar_img(img,constantes.ANCHO_MONEDAS,constantes.ALTO_MONEDAS)
     monedas_images.append(img)
     
@@ -93,8 +93,8 @@ for i in range(num_monedas):
 pygame.display.set_caption("1°game")
 
 #fuentes
-font = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 22)#el segundo valor es el tamaño
-font_coins = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 18)
+font = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 22)#el segundo valor es el tamaño
+font_coins = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 18)
 #creando un grupo de sprites
 grupo_damage_text = pygame.sprite.Group()
 grupo_balas = pygame.sprite.Group()
@@ -107,11 +107,11 @@ pocion = Item(150,150,1,[pocion])
 grupo_items.add(pocion)
 grupo_items.add(moneda)
 #corazones
-corazon_lleno = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\items\\corazon_lleno.png").convert_alpha()
+corazon_lleno = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\corazon_lleno.png").convert_alpha()
 corazon_lleno = escalar_img(corazon_lleno,constantes.ANCHO_CORAZONES,constantes.ALTO_CORAZONES)
-corazon_medio = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\items\\corazon_medio.png").convert_alpha()
+corazon_medio = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\corazon_medio.png").convert_alpha()
 corazon_medio = escalar_img(corazon_medio,constantes.ANCHO_CORAZONES,constantes.ALTO_CORAZONES)
-corazon_vacio = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python=ALE\\resumen_pygame\\introducción\\items\\corazon_vacio.png").convert_alpha()
+corazon_vacio = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\corazon_vacio.png").convert_alpha()
 corazon_vacio = escalar_img(corazon_vacio,constantes.ANCHO_CORAZONES,constantes.ALTO_CORAZONES)
 
 def dibujar_texto(texto,font,color,x,y):

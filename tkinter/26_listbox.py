@@ -21,7 +21,7 @@ def Select(event):
     print(f"seleccionado {listbox.get(listbox.curselection())}")
 
 listbox.bind("<<ListboxSelect>>",Select)
-
+    
 listbox.pack()
 
 ventana.mainloop()

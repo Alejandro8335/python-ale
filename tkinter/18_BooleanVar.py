@@ -11,7 +11,7 @@ check.pack()
 etiqueta = tk.Label(ventana)
 etiqueta.pack()
 
-def Update(*args):
+def Update(args):
     etiqueta.config(text=bool.get())#0 or 1
     print(bool.get())#True or False
 

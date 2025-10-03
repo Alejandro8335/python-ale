@@ -6,7 +6,7 @@ ventana.title("radiobutton")
 #opcion_1 = tk.Radiobutton(ventana,text="opcion 1")
 #opcion_1.pack()
 
-#variable_control = tk.IntVar()
+variable_control = tk.IntVar()
 
 #def mostrar():
     #print(variable_control.get())#buestra la valor de la opcion
