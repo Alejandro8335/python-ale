@@ -3,7 +3,7 @@ import tkinter as tk
 
 # funcion de operaciones
 def calcular():
-    global entry
+    global entry, label
     try:
         contenido = entry.get()
         # cierra los parentesis abiertos
@@ -50,6 +50,7 @@ def calcular():
         for i in reversed(list(re.finditer(r"(\d+|\))%", contenido))):
             pos = i.start() + len(i.group(1))
             contenido = contenido[:pos] + "/100" + contenido[pos+1:]#con + 1 me desplazo un caracter para eliminarlo (%)
+            # % = /100 se pone al final de la expresion
         
         # print para debuguear
         # print(contenido)
@@ -63,7 +64,7 @@ def calcular():
     
     except Exception:
         entry.delete(0, tk.END)
-        entry.insert(0, "Error")
+        label.config(text="Error")
 
 def operaciones(signo):
     global entry
@@ -169,14 +170,14 @@ for row,column,signo in lista_signos:
     button_signo = tk.Button(ventana, text=signo,width=4,height=2,command=lambda s=signo:operaciones(s))
     button_signo.grid(row=row, column=column,sticky="nsew")
 
-# linea 1
+# linea 2(btns: clear, parentesis)
 button_clear = tk.Button(ventana, text="AC",width=4,height=2,command=lambda:clear())
 button_clear.grid(row=2, column=0,sticky="nsew")
 
 button_parentesis = tk.Button(ventana, text="(  )",width=4,height=2,command=lambda:agregar_parentesis())
 button_parentesis.grid(row=2, column=1,sticky="nsew")
 
-# linea 5
+# linea 6(btns: 0, ., ⌫, =)
 button_0 = tk.Button(ventana, text="0",width=4,height=2,command=lambda:agregar_numero(0))
 button_0.grid(row=6, column=0,sticky="nsew")
 
