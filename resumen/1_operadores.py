@@ -72,3 +72,12 @@ print(x)  # Resultado: 7
 x = 10
 x += 3  # Equivalente a x = x + 3
 print(x)  # Resultado: 13
+
+
+# raices :
+# x ** (1/n)
+def raiz(num,num_raiz):
+    return num ** (1/num_raiz)
+
+print(raiz(16,2)) #4
+print(raiz(27,3)) #3.0

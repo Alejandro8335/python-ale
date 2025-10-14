@@ -1,1 +1,1 @@
-print(eval("5*-5"))
+print(eval("100*20%"))
