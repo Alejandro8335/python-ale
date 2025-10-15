@@ -164,9 +164,7 @@ for idx , num in enumerate([7,8,9,4,5,6,1,2,3]):
     button.grid(row= 3 + idx // 3, column= idx % 3 , sticky="nsew")
 
 # botones de operaciones
-lista_signos = [(2,2,"%"),(2,3,"/"),(3,3,"*"),(4,3,"-"),(5,3,"+")]
-
-for row,column,signo in lista_signos:
+for row,column,signo in [(2,2,"%"),(2,3,"/"),(3,3,"*"),(4,3,"-"),(5,3,"+")]:
     button_signo = tk.Button(ventana, text=signo,width=4,height=2,command=lambda s=signo:operaciones(s))
     button_signo.grid(row=row, column=column,sticky="nsew")
 
