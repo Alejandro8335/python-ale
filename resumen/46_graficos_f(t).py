@@ -20,7 +20,7 @@ line, = ax.plot([], [], lw=2)
 
 start_time = time.time()
 def Update_grafico(Frame):
-    global x_data,y_data,start_time
+    global x_data,y_data,start_time,line
     x_data.append(time.time()-start_time)
     y_data.append(random.uniform(0, 10))
 

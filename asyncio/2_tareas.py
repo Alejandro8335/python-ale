@@ -11,6 +11,8 @@ async def Task_2():
 async def Main():
     task_1 = asyncio.create_task(Task_1())
     task_2 = asyncio.create_task(Task_2())
+    # agenda la tarea, pero no la ejecuta inmediatamente.
+    # La tarea se ejecuta cuando el event loop tiene oportunidad de avanzar.
     
     await task_1
     await task_2

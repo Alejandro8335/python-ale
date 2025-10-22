@@ -30,3 +30,4 @@ numeros = [2,4,6,8,10]
 numeros_dumtiplicados =[x*2 for x in numeros]#no necesariamente tiene que ser x
 print(numeros_dumtiplicados)
 
+# break detiene inmediatamente el bucle actual y pasa a la siguiente instrucción después de ese bucle

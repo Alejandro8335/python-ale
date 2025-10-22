@@ -7,9 +7,9 @@ async def task(sleep,for_):
 
 async def main():
     await asyncio.gather(
-        asyncio.create_task(task(1,5)),
-        asyncio.create_task(task(2,5)),
-        asyncio.create_task(task(3,5))
-    )
+        task(1,5),
+        task(2,5),
+        task(3,5)
+    )# No hace falta create_task porque gather lo hace por vos
 
 asyncio.run(main())

@@ -62,7 +62,11 @@ def calcular():
         else:
             entry.insert(0, resultado)  # Mostrar como float si hay parte decimal
     
-    except Exception:
+    except ZeroDivisionError:
+        entry.delete(0, tk.END)
+        label.config(text="ZeroDivisionError")
+        
+    except:
         entry.delete(0, tk.END)
         label.config(text="Error")
 
