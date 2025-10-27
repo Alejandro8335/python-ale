@@ -8,22 +8,19 @@ class Graph():
         # axis (x) y (y),x is time dependent variable
         self.X_data = []
         self.Y_data = []
-        # set the graph
-        self.fig, self.ax = plt.subplots()
-        self.line, = self.ax.plot([], [], lw=2)
-        plt.title("Gráfico de distancia")
-        plt.xlabel("Tiempo")
-        plt.ylabel("Valor")
+        
         # start time and data the axis y
         self.start_time = time()
         
-        # graph
-        self.animacion = FuncAnimation(self.fig, self.Update_frame,interval=200)
-
         self.open_state = False
-        
     def Graph_open(self):
         if not self.open_state:
+            self.fig, self.ax = plt.subplots()
+            self.line, = self.ax.plot([], [], lw=2)
+            plt.title("Gráfico de distancia")
+            plt.xlabel("Tiempo")
+            plt.ylabel("Valor")
+            self.animacion = FuncAnimation(self.fig, self.Update_frame, interval=200, cache_frame_data=False)
             plt.show(block=False)
             self.open_state = True
     

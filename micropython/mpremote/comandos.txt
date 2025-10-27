@@ -1,0 +1,45 @@
+🔌 Conexión y REPL
+Abrir REPL interactivo
+py -m mpremote connect COM3 repl
+→ Entrás al prompt >>> de MicroPython en tu ESP32.
+
+Salir del REPL Presioná Ctrl+] (o Ctrl+Z y Enter en algunos casos).
+
+📂 Manejo de archivos
+Listar archivos en la placa
+py -m mpremote connect COM3 fs ls
+
+Subir un archivo desde tu PC al ESP32(main o la ruta pero si es la ruta 
+tiene que ir entre "" en toda la ruta y dejas : afuera de la "")
+py -m mpremote connect COM3 fs cp main.py :
+
+Subir el archivo por el REPL sin que se descargue
+py -m mpremote connect COM3 fs cat main.py :
+
+Bajar un archivo desde el ESP32 a tu PC
+py -m mpremote connect COM3 fs cp :main.py .
+
+Borrar un archivo en el ESP32
+py -m mpremote connect COM3 fs rm :main.py
+
+🚀 Ejecución de scripts
+Ejecutar un archivo directamente (sin grabarlo en la placa)
+py -m mpremote connect COM3 run main.py
+
+Reiniciar la placa
+py -m mpremote connect COM3 reset
+
+🧪 Comandos útiles dentro del REPL
+Una vez dentro del REPL (>>>):
+
+import os          # o uos, según firmware
+print(os.listdir())  # ver archivos
+
+Reiniciar la placa dentro del REPL
+import machine
+machine.reset()      # reiniciar la placa
+👉 Al reiniciar, MicroPython vuelve a ejecutar boot.py y main.py.
+
+⚡ Tip pro
+Si usás siempre COM3, podés simplificar con:
+py -m mpremote connect COM3
