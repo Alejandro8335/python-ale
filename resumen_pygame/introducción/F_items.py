@@ -12,17 +12,16 @@ class Item(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (x,y)
         
-    def update(self,player):
+    def update(self,player,posicion_ventana):
+        self.rect.move_ip(posicion_ventana)
         #comprobar colision entre el personaje y el items
         if self.rect.colliderect(player.shape):#lo que esta adentro parentecis aclara que tiera que ser con el personaje
-            #monedas
-            if self.item == 0:
-                player.monedas += 1
-            elif self.item == 1:
+            if self.item:
                 player.vida += VIDA_POCION
                 if player.vida >= VIDA_PERSONAJE:
-                    self.vida = VIDA_PERSONAJE
-                    
+                    player.vida = VIDA_PERSONAJE
+            else:
+                player.monedas += 1
             self.kill()
         cooldown_animacion = 150
         self.image = self.animacion[self.frame]

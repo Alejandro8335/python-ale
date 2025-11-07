@@ -9,7 +9,7 @@ class Clint():
         self.send_lock = asyncio.Lock() # es la forma más limpia y segura de serializar accesos a un recurso compartido
         self.queue = Queue_obj # cola para mensajes recibidos
         self.def_connect_state = False
-        
+        self.def_recv_state =  False
     # def the Connect and Disconnect
     async def Connect(self):
         try:
@@ -48,17 +48,25 @@ class Clint():
         
     async def Recv_to_the_server(self):
         loop = asyncio.get_running_loop()
-        while self.connect_state:
+        if not self.def_recv_state:
+            self.def_recv_state = True
+            print("recv ok")
             try:
-                print("esperando")
-                data = await loop.sock_recv(self.socker, 64)
-                print("hay data")
-                if not data: # pq quiere decir que el server cerro la conexión 
-                    await self.queue.put(None)  # señal de fin
-                    self.connect_state = False
-                    break
-                await self.queue.put(data.decode().strip())
-                # no puedo usar return pq me saca del bucle
-            except Exception as e:
-                print(e)
-                self.connect_state = False
+                while self.connect_state and self.def_recv_state:
+                    try:
+                        data = await loop.sock_recv(self.socker, 64)
+                        if not data: # pq quiere decir que el server cerro la conexión 
+                            await self.queue.put(None)  # señal de fin
+                            self.connect_state = False
+                            self.def_recv_state = False
+                            break
+                        list_data = data.decode().split()
+                        for _data_ in list_data:
+                            await self.queue.put(_data_.strip())
+                        # no puedo usar return pq me saca del bucle
+                    except Exception as e:
+                        print(e)
+                        self.connect_state = False
+                        self.def_recv_state = False
+            finally:
+                self.def_recv_state = False

@@ -13,9 +13,6 @@ Subir un archivo desde tu PC al ESP32(main o la ruta pero si es la ruta
 tiene que ir entre "" en toda la ruta y dejas : afuera de la "")
 py -m mpremote connect COM3 fs cp main.py :
 
-Subir el archivo por el REPL sin que se descargue
-py -m mpremote connect COM3 fs cat main.py :
-
 Bajar un archivo desde el ESP32 a tu PC
 py -m mpremote connect COM3 fs cp :main.py .
 

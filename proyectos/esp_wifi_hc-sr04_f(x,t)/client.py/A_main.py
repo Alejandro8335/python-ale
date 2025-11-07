@@ -10,4 +10,4 @@ ESP32_PORT = 8080
 # create Assembler object and set Assembler
 assembler = Assembler(ESP32_IP,ESP32_PORT)
 
-asyncio.run(assembler.assembler())
+asyncio.run(assembler.Root_open())

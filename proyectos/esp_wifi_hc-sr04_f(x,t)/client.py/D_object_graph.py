@@ -8,11 +8,10 @@ class Graph():
         # axis (x) y (y),x is time dependent variable
         self.X_data = []
         self.Y_data = []
-        
         # start time and data the axis y
         self.start_time = time()
-        
         self.open_state = False
+        self.data_consumer_state = False
     def Graph_open(self):
         if not self.open_state:
             self.fig, self.ax = plt.subplots()
@@ -37,9 +36,19 @@ class Graph():
         return self.line,
     
     async def Data_consumer(self):
-        while True:
-            data = await self.queue.get()
-            if data is None:  # señal de fin
-                break
-            self.X_data.append(time()-self.start_time)
-            self.Y_data.append(float(data))
+        if not self.data_consumer_state:
+            self.data_consumer_state = True
+            try:
+                while self.data_consumer_state:
+                    try:
+                        data = await self.queue.get()
+                        print(data)
+                        if data == None:  # señal de fin
+                            break
+                        if data:
+                            self.X_data.append(time()-self.start_time)
+                            self.Y_data.append(float(data))
+                    except Exception as e:
+                        print(e)
+            finally:
+                self.data_consumer_state = False

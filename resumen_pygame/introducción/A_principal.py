@@ -1,20 +1,22 @@
 #MAIN:
-
 import pygame
 import B_constantes as constantes
 from C_personajes import Personajes #as en este caso renombraria la clase(lo que hace es renombrar lo que importamos)
 from D_armas import Weapon
 from E_texto import Damage_text
 from F_items import Item
+from G_mundo import Mundo
 import os
 
 pygame.init()
 ventana = pygame.display.set_mode((constantes.ANCHO,constantes.ALTO))#tiene que ir con doble parentesis
+#cambiando el nombre del juego
+pygame.display.set_caption("1°game")
 
 def escalar_img(imagen,ancho,alto):
     imagen_escalada = pygame.transform.scale(imagen, (ancho,alto))
     return imagen_escalada
-#esto no escala una imagen la forma correcta es:
+#esto escala una imagen la forma correcta es:
 # def escalar_img(imagen,scala):
 #     ancho = int(imagen.get_width()*scala)
 #     alto = int(imagen.get_height()*scala)
@@ -50,14 +52,21 @@ for eni in tipos_enemigos:
         img_enemigo = escalar_img(img_enemigo,constantes.ANCHO_ENEMIGOS,constantes.ALTO_ENEMIGOS)
         lista_temp.append(img_enemigo)
     animaciones_enemigos.append(lista_temp)
-    
+
+def Draw_grid():
+    for i in range(16):
+        # verticales
+        pygame.draw.line(ventana,constantes.COLOR_LINE,(i*constantes.TILE_SIZE,0),(i*constantes.TILE_SIZE,constantes.ALTO))
+        # horizontales
+        pygame.draw.line(ventana,constantes.COLOR_LINE,(0,i*constantes.TILE_SIZE),(constantes.ANCHO,i*constantes.TILE_SIZE))
+
 #creando al jugador de la clase personaje
-player =  Personajes(50, 50, animaciones,constantes.VIDA_PERSONAJE)#son las coordenadas
+player =  Personajes(50, 50, animaciones,constantes.VIDA_PERSONAJE,1)# son las coordenadas
 
 #crear un enemigo de la clase personaje
-Espinaria = Personajes(400,300,animaciones_enemigos[0],constantes.VIDA_ESPINARIA)#estoy llamando a una lista que esta adentro de otra lista
-Esporador = Personajes(200,200,animaciones_enemigos[1],constantes.VIDA_ESPORADOR)
-Espinaria_2 = Personajes(100,250,animaciones_enemigos[0],constantes.VIDA_ESPINARIA)
+Espinaria = Personajes(400,300,animaciones_enemigos[0],constantes.VIDA_ESPINARIA,0)#estoy llamando a una lista que esta adentro de otra lista
+Esporador = Personajes(200,200,animaciones_enemigos[1],constantes.VIDA_ESPORADOR,0)
+Espinaria_2 = Personajes(100,250,animaciones_enemigos[0],constantes.VIDA_ESPINARIA,0)
 
 #creando una lista de enemigos
 lista_enemigos = []
@@ -88,9 +97,6 @@ for i in range(num_monedas):
     img = pygame.image.load(fr"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\moneda_{i}.png").convert_alpha()
     img = escalar_img(img,constantes.ANCHO_MONEDAS,constantes.ALTO_MONEDAS)
     monedas_images.append(img)
-    
-#cambiando el nombre del juego
-pygame.display.set_caption("1°game")
 
 #fuentes
 font = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 22)#el segundo valor es el tamaño
@@ -101,8 +107,8 @@ grupo_balas = pygame.sprite.Group()
 grupo_items = pygame.sprite.Group()
 
 #objeto items
-moneda = Item(100,100,0,monedas_images)
-pocion = Item(150,150,1,[pocion])
+moneda = Item(300,100,0,monedas_images)
+pocion = Item(150,300,1,[pocion])
 
 grupo_items.add(pocion)
 grupo_items.add(moneda)
@@ -129,6 +135,15 @@ def Vida_player():
         else:
             ventana.blit(corazon_vacio,(5+i*25,5))
             
+
+list_tiles = []
+for i in range(Contar(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\tiles")):
+    imagen = pygame.image.load(fr"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\tiles\\{i}.png")
+    imagen = pygame.transform.scale(imagen,(constantes.TILE_SIZE,constantes.TILE_SIZE))
+    list_tiles.append(imagen)
+# creando un objeto Mundo
+mundo = Mundo()
+mundo.Process_list(list_tiles,0,32)
 #definir las variables de movimiento
 mover_arriba = False
 mover_abajo = False
@@ -142,7 +157,7 @@ run = True
 while run:
     #que vaya a 60 FPS
     reloj.tick(constantes.FPS)
-    #cambiando el color del fondo
+    # fondo
     ventana.fill(constantes.COLOR_BG)
     #calcular el movimiento del jugador
     delta_x = 0
@@ -157,23 +172,24 @@ while run:
     if mover_derecha:
         delta_x += constantes.VELOCIDAD_PERSONAJE
     #funciones del jugador
-    #mover al jugador
-    player.movimiento(delta_x,delta_y)
+    mundo.Dibujar_mapa(ventana)
+    # mover al jugador
+    posicion_ventana = player.Movimiento_player(delta_x,delta_y)
+    mundo.Update_mundo(posicion_ventana)
     #dibujar al jugador
+    player.Draw(ventana)
     
-    player.draw(ventana)
     #actualizando al jugador
+    player.Update()
     
-    player.update()
     #funciones del enemigo
     #actualizar a los enemigos
-    for ene in lista_enemigos:
-        ene.update()
-        #print(ene.vida)
     #dibujar a los enemigo
     for ene in lista_enemigos:
-        ene.draw(ventana)
-    
+        ene.Draw(ventana)
+        ene.Movimiento_enemigos(posicion_ventana)
+        ene.Update()
+        #print(ene.vida)
     for event in pygame.event.get():
         #para cerrar el juego
         if event.type == pygame.QUIT:#alt f4 o tocar la equis son eventos de quit
@@ -225,8 +241,7 @@ while run:
     #dibujar monedas
     dibujar_texto(f"coins: {player.monedas}",font_coins,constantes.COLOR_COINS,85,3)
     #actualizar items
-    grupo_items.update(player)
-    
+    grupo_items.update(player,posicion_ventana)
     #dibujar items
     grupo_items.draw(ventana)
     pygame.display.update()
