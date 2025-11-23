@@ -10,7 +10,7 @@ lista.append("nuevo")
 #agregando un elemento a la lista en un indice en especifico
 lista.insert(2,"nuevo2")
 
- #agregando varios elementos a la lista 
+#agregando varios elementos a la lista 
 lista.extend((False,2020))
 
 #eliminando un elemento de la lista (por su indice)

@@ -4,7 +4,7 @@ diccionario = {
     "edad" : "15"
 }
 #devuelve todas las claves
-claves = diccionario . keys()
+claves = diccionario.keys()
 
 #devuelve el elemento
 valor = diccionario.get("nombre")#si no ensuentra nada devuelve none

@@ -27,7 +27,7 @@ class Weapon():
         distancia_x = mouse_posicion[0] - self.shape.centerx
         distancia_y = mouse_posicion[1] - self.shape.centery
         self.angulo = math.degrees(math.atan2(distancia_y, distancia_x))
-        self.Flip(player.flip)
+        self.Flip()
         #print(self.angulo)
         
         #detectar los click del mouse
@@ -41,11 +41,9 @@ class Weapon():
                 self.disparar = False
         return bala
         
-    def Flip(self, flip):
-         imagen_flip = pygame.transform.flip(self.imagen_P, flip, True)
-         self.imagen = pygame.transform.rotate(self.imagen_P, -self.angulo)
-         self.shape = self.imagen.get_rect(center=self.shape.center)
-
+    def Flip(self):
+        self.imagen = pygame.transform.rotate(self.imagen_P, -self.angulo)
+        self.shape = self.imagen.get_rect(center=self.shape.center)
     def draw(self, interfaz):
         interfaz.blit(self.imagen, self.shape)
         #pygame.draw.rect(interfaz, constantes.HITBOX_A, self.shape, 2)
@@ -62,7 +60,7 @@ class  Bullet(pygame.sprite.Sprite):
         #calculando la velosidad de la bala
         self.delta_x = math.cos(math.radians(self.angulo))*constantes.VELOCIDAD_BALA
         self.delta_y = math.sin(math.radians(self.angulo))*constantes.VELOCIDAD_BALA
-    def update_b(self,lista_enemigo):
+    def update_b(self,lista_enemigo,list_obstaculos):
         dano = 0
         posicion_dano = None
         self.rect.x += self.delta_x
@@ -76,9 +74,13 @@ class  Bullet(pygame.sprite.Sprite):
         #verificar si hay colision con enemigos
         for enemigo in lista_enemigo:
             if enemigo.shape.colliderect(self.rect):
-                dano = constantes.DANO_BALA + random.randint(-25,50)
+                dano = constantes.DANO_BALA + random.randint(-25,25)
                 enemigo.vida -= dano
                 posicion_dano = enemigo.shape
+                self.kill()
+                break
+        for obs in list_obstaculos:
+            if obs.colliderect(self.rect):
                 self.kill()
                 break
         return dano , posicion_dano

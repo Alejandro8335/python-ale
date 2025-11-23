@@ -8,10 +8,10 @@ class Wifi_sta_server:
     async def Send_to_the_client(self, msj):
         try:
             async with self.lock:
-                self.writer.write(msj.encode())
+                self.writer.write(str(msj).encode())
                 await self.writer.drain()
         except Exception as e:
-            print("Error en envío:", e)
+            print("in server,error send_to_the_client", e)
             self.client_state = False
     async def Recv_to_the_client(self,list_recv):
         try:

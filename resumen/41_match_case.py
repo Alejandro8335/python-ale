@@ -5,9 +5,6 @@ match opcion:
     case 1:
         print("elegiste la opcion 1")
         
-    case 1:
-        print("elegiste la opcion 1")
-        
     case 2:
         print("elegiste la opcion 2")
         

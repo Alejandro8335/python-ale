@@ -31,7 +31,10 @@ resto2 = -12 % 5 # devuelve 3
 igual_que=  5 == 6 #false
 
 distinto_que = 5 != 6 #true
-
+distinto_que_2 = 5 =! 6
+print(distinto_que_2)
+# != Compara si dos valores son distintos
+# =! Se interpreta como = not, no compara
 mayor_que = 5>6 #false
 
 menor_que = 5<6 #true

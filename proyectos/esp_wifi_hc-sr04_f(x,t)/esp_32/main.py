@@ -12,7 +12,6 @@ sta.connect("Toti", "avion123")
 while not sta.isconnected():
     asyncio.sleep(1)
 ip = sta.ifconfig()[0]
-
 async def Assembler(reader,writer):
     list_recv = []
     peername = writer.get_extra_info("peername")
@@ -20,8 +19,9 @@ async def Assembler(reader,writer):
         print(f"Conexión rechazada de {peername[0]}")
         writer.close()
         await writer.wait_closed()
+        return
     wifi = Wifi_sta_server(reader, writer)
-    asyncio.create_task(wifi.Recv_to_the_client())
+    asyncio.create_task(wifi.Recv_to_the_client(list_recv))
     sensor = HCSR04(15,5)
     sending_msj = False
     while wifi.client_state:
@@ -31,17 +31,17 @@ async def Assembler(reader,writer):
                 print(f"valor que manda el cliente :{data_recv}")
             if not sending_msj:
                 sending_msj = True
-                await wifi.Send_to_the_client(asyncio.create_task(sensor.send_pulse_cm()))
+                await wifi.Send_to_the_client(asyncio.create_task(sensor.Sendpulse_cm()))
                 sending_msj = False
             await asyncio.sleep(0.1)
         except Exception as e:
             print(e)
 async def Main():
     server = await asyncio.start_server(Assembler,"0.0.0.0", 8080)
-    async with server:
-        try:
-            await server.serve_forever()
-        finally:
-            server.close()
-            await server.wait_closed()
+    try:
+        while True:
+            await asyncio.sleep(3600)
+    finally:
+        server.close()
+        await server.wait_closed()
 asyncio.run(Main())

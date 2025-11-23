@@ -6,7 +6,7 @@ class HCSR04:
         self.trigger = machine.Pin(trigger_pin, mode=machine.Pin.OUT, pull=None)
         self.trigger.value(0)
         self.echo = machine.Pin(echo_pin, mode=machine.Pin.IN, pull=None)
-    async def send_pulse_cm(self):
+    async def Sendpulse_cm(self):
         self.trigger.value(0)
         await asyncio.sleep_ms(1)
         self.trigger.value(1)

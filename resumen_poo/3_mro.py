@@ -1,4 +1,3 @@
-
 class A:
     def hablar(self):
         print("hola desde A")
