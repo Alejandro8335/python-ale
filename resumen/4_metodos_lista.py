@@ -5,7 +5,7 @@ lista =list(("hola","ale",15))
 cantidad_elementos = len(lista)
 
 #agregando un elemento a la lista 
-lista.append("nuevo")
+lista.append("nuevo","hola")
 
 #agregando un elemento a la lista en un indice en especifico
 lista.insert(2,"nuevo2")

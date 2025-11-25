@@ -42,7 +42,7 @@ VELOCIDAD_ESPORADOR = 3
 RANGO_VISION_ESPORADOR = 500
 VIDA_POCION = 100
 VELOCIDAD_BALA = 15
-DANO_BALA = 25 #problemas para detectar la (Ñ)
+DANO_BALA = 15 #problemas para detectar la (Ñ)
 COOLDOWN_ARMA = 200 #1/2 de segundo
 #(Rojo, Verde, Azul, Alfa)
 #int max 255
@@ -53,5 +53,5 @@ FILA_TILE = 32
 COLUMNAS = 24
 
 # spawn
-SPAWN_NIVEL_0 = (50,50)
-SPAWN_NIVEL_1 = (1500,50)
+SPAWN_NIVEL_0 = (350,350)
+SPAWN_NIVEL_1 = (1000,55)

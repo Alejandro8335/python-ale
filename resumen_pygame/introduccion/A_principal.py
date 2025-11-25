@@ -61,7 +61,7 @@ def Draw_grid():
         pygame.draw.line(ventana,constantes.COLOR_LINE,(0,i*constantes.TILE_SIZE),(constantes.ANCHO,i*constantes.TILE_SIZE))
 
 #creando al jugador de la clase personaje
-player =  Personajes(50, 50, animaciones,constantes.VIDA_PERSONAJE,1,constantes.ANCHO_PERSONAJE,constantes.ALTO_PERSONAJE)# son las coordenadas
+player =  Personajes(constantes.SPAWN_NIVEL_0[0], constantes.SPAWN_NIVEL_0[1], animaciones,constantes.VIDA_PERSONAJE,1,constantes.ANCHO_PERSONAJE,constantes.ALTO_PERSONAJE)# son las coordenadas
 #imagenes arco
 img_arco = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\armas\\arco.png").convert_alpha()
 img_arco_escalado = escalar_img(img_arco, constantes.ANCHO_ARMA, constantes.ALTO_ARMA)
@@ -90,22 +90,28 @@ font = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\
 font_coins = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 18)
 font_game_over = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 100)
 font_reset = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 75)
+font_sonido = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 25)
 text_game_over = font_game_over.render("game over",True,constantes.COLOR_GAME_OVER)
 text_reset = font_reset.render("reset",True,constantes.COLOR_BLANCO)
 text_game = font_reset.render("play",True,constantes.COLOR_COINS)
 text_exit = font_reset.render("exit",True,constantes.COLOR_COINS)
+text_sonido = font_sonido.render("sonido True",True,constantes.COLOR_COINS)
+text_you_won = font_game_over.render("you won",True,constantes.COLOR_COINS)
 # bts the game
 text_game_rect = text_game.get_rect(center=(constantes.ANCHO/2,constantes.ALTO/2))
 text_exit_rect = text_exit.get_rect(center=(constantes.ANCHO/2,int(constantes.ALTO/4*3)))
+text_sonido_rect = text_sonido.get_rect(center=(700,575))
 def Ajustes():
     ventana.fill(constantes.COLOR_BG)
     dibujar_texto("mi primer juego",font_game_over,constantes.COLOR_DAMAGE,constantes.ANCHO/2,constantes.ALTO/2-150)
     btn_game_rect = pygame.draw.rect(ventana,constantes.COLOR_DAMAGE,(text_game_rect.left-10,text_game_rect.top,text_game_rect.width+20,text_game_rect.height))
     btn_exit_rect = pygame.draw.rect(ventana,constantes.COLOR_DAMAGE,(text_exit_rect.left-10,text_exit_rect.top,text_exit_rect.width+20,text_exit_rect.height))
+    btn_sonido_rect = pygame.draw.rect(ventana,constantes.COLOR_DAMAGE,(text_sonido_rect.left-10,text_sonido_rect.top,text_sonido_rect.width+20,text_sonido_rect.height))
     ventana.blit(text_exit,text_exit_rect)
     ventana.blit(text_game,text_game_rect)
+    ventana.blit(text_sonido,text_sonido_rect)# TypeErro
     pygame.display.update()
-    return btn_game_rect , btn_exit_rect
+    return btn_game_rect ,btn_exit_rect ,btn_sonido_rect
 #creando un grupo de sprites
 grupo_damage_text = pygame.sprite.Group()
 grupo_balas = pygame.sprite.Group()
@@ -163,17 +169,24 @@ sonido_puertas.set_volume(0.50)# 1 = 100%
 running = True
 ajustes = True
 sonido = True
+juego_terminado = False
+canal_pasos = pygame.mixer.Channel(0)
 while running:
     if sonido:
-        sonido_puertas.set_volume(0.50)
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.play()
+            sonido_fondo = True
+        sonido_puertas.set_volume(0.25)
         sonido_pasos.set_volume(1.0)
-        pygame.mixer.music.set_volume(1.0)
+        pygame.mixer.music.set_volume(0.5)
     else:
-        sonido_puertas.set_volume(0)
-        sonido_pasos.set_volume(0)
-        pygame.mixer.music.set_volume(0)
+        sonido_puertas.stop()
+        sonido_pasos.stop()
+        pygame.mixer.music.stop()
+        sonido_fondo = False
     if ajustes:
-        btn_game_rect, btn_exit_rect = Ajustes()
+        text_sonido = font_sonido.render(f"sonido {sonido}",True,constantes.COLOR_COINS)
+        btn_game_rect, btn_exit_rect, btn_sonido_rect = Ajustes()
         for event in pygame.event.get():
             event_type = event.type
             if event_type == pygame.QUIT:
@@ -187,6 +200,8 @@ while running:
                     mover_derecha = False
                 if event.button == 1 and btn_exit_rect.collidepoint(event.pos):
                     running = False
+                if event.button == 1 and btn_sonido_rect.collidepoint(event.pos):
+                    sonido = not sonido
             elif event_type == pygame.KEYDOWN:
                 if event.key ==  pygame.K_ESCAPE:
                     ajustes = False
@@ -224,24 +239,16 @@ while running:
                 elif event_type == pygame.KEYDOWN:
                     if event.key == pygame.K_w:
                         mover_arriba = True
-                        if sonido:
-                            sonido_pasos.play()
                     if event.key == pygame.K_s:
                         mover_abajo = True
-                        if sonido:
-                            sonido_pasos.play()
                     if event.key == pygame.K_a:
                         mover_izquierda = True
-                        if sonido:
-                            sonido_pasos.play()
                     if event.key == pygame.K_d:
                         mover_derecha = True
-                        if sonido:
-                            sonido_pasos.play()
                     if event.key ==  pygame.K_ESCAPE:
                         ajustes = True
                 elif event_type == pygame.MOUSEBUTTONDOWN:
-                    if player.vida == 0:
+                    if player.vida == 0 or juego_terminado:
                         #collidepoint(event.pos) es la forma más directa de saber si el mouse 
                         # está sobre un rectángulo en Pygame.
                         if event.button == 1 and reset_rect.collidepoint(event.pos):
@@ -249,11 +256,12 @@ while running:
                             player.monedas = 0
                             player.shape.center = constantes.SPAWN_NIVEL_0
                             nivel = 0
+                            juego_terminado = False
                             mundo.Reset_world((grupo_damage_text,grupo_balas,grupo_items))
                             mundo.Process_list(list_tiles,nivel,32,(monedas_images,[pocion]),animaciones_enemigos)
                             for items in mundo.list_items:
                                 grupo_items.add(items)
-                    elif event.button == 3:
+                    elif event.button == 3: 
                         mundo.Cambiar_puerta(player)
                         if sonido:
                             sonido_puertas.play()
@@ -272,69 +280,81 @@ while running:
                         mover_izquierda = False
                     if event.key == pygame.K_d:
                         mover_derecha = False
-        if player.vida != 0:
-            # calcular el movimiento del jugador
-            delta_x = 0
-            delta_y = 0
-            # en python es al reves los ejes
-            if mover_arriba:
-                delta_y -= constantes.VELOCIDAD_PERSONAJE
-            if mover_abajo:
-                delta_y += constantes.VELOCIDAD_PERSONAJE
-            if mover_izquierda:
-                delta_x -= constantes.VELOCIDAD_PERSONAJE
-            if mover_derecha:
-                delta_x += constantes.VELOCIDAD_PERSONAJE
-            #funciones del jugador
-            # mover al jugador
-            posicion_ventana, nivel_completado = player.Movimiento_player(delta_x,delta_y,mundo.list_obstaculos,mundo.pass_tile)
-            if nivel_completado:
-                if nivel == 0:
-                    nivel += 1
-                    player.shape.center = constantes.SPAWN_NIVEL_1
-                elif nivel == 1:
-                    nivel -= 1
-                    player.shape.center = constantes.SPAWN_NIVEL_0
-                mundo.Reset_world((grupo_damage_text,grupo_balas,grupo_items))
-                mundo.Process_list(list_tiles,nivel,32,(monedas_images,[pocion]),animaciones_enemigos)
-                for items in mundo.list_items:
-                    grupo_items.add(items)
-            mundo.Update_mundo(posicion_ventana)
-            #actualizando al jugador
-            player.Update()
-            
-            #funciones del enemigo
-            #actualizar a los enemigos
-            for ene in mundo.list_enemigos:
-                if ene.vida == 0:
-                    mundo.list_enemigos.remove(ene)
-                else:
-                    ene.Movimiento_enemigos(posicion_ventana,mundo.list_obstaculos,player)
-                    ene.Update()
-                #print(ene.vida)  
-            #actualiza el estado del arma
-            bala = arco.update(player)
-            if bala:
-                grupo_balas.add(bala)
-            #dibujar balas
-            for bala in grupo_balas:
-                bala.Draw_b(ventana)
-                dano,posicion_dano = bala.update_b(mundo.list_enemigos,mundo.list_obstaculos)
-                #print(grupo_balas)
-                if dano:
-                    damage_text = Damage_text(posicion_dano.centerx ,posicion_dano.centery , str(dano), font ,constantes.COLOR_DAMAGE)
-                    grupo_damage_text.add(damage_text)
-            #actualizar daño
-            grupo_damage_text.update(posicion_ventana)
-            #actualizar items
-            grupo_items.update(player,posicion_ventana)
-        else:
-            text_game_over_rect = text_game_over.get_rect(center=(constantes.ANCHO/2,(constantes.ALTO/2)-150))
-            ventana.blit(text_game_over,text_game_over_rect)
+        if sonido:
+            if (mover_izquierda or mover_derecha or mover_arriba or mover_abajo):
+                if not canal_pasos.get_busy():
+                    canal_pasos.play(sonido_pasos)
+            else:
+                sonido_pasos.stop()
+        if juego_terminado:
+            text_you_won_rect = text_you_won.get_rect(center=(constantes.ANCHO/2,(constantes.ALTO/2)-150))
+            ventana.blit(text_you_won,text_you_won_rect)
             text_reset_rect = text_reset.get_rect(center=(constantes.ANCHO/2,constantes.ALTO/3*2))
             reset_rect = pygame.draw.rect(ventana,constantes.COLOR_GAME_OVER,text_reset_rect)
             ventana.blit(text_reset,text_reset_rect)
-        pygame.display.update()
-        #update():se usa para actualizar la pantalla con cualquier cambio realizado en los elementos gráficos
+        else:
+            if player.vida != 0:
+                # calcular el movimiento del jugador
+                delta_x = 0
+                delta_y = 0
+                # en python es al reves los ejes
+                if mover_arriba:
+                    delta_y -= constantes.VELOCIDAD_PERSONAJE
+                if mover_abajo:
+                    delta_y += constantes.VELOCIDAD_PERSONAJE
+                if mover_izquierda:
+                    delta_x -= constantes.VELOCIDAD_PERSONAJE
+                if mover_derecha:
+                    delta_x += constantes.VELOCIDAD_PERSONAJE
+                #funciones del jugador
+                # mover al jugador
+                posicion_ventana, nivel_completado = player.Movimiento_player(delta_x,delta_y,mundo.list_obstaculos,mundo.pass_tile,mundo.list_tiles_x_izquierda,mundo.list_tiles_x_derecha,mundo.list_tiles_y_arriba,mundo.list_tiles_y_abajo)
+                if nivel_completado and not (mundo.list_enemigos or grupo_items):
+                    if nivel == 0 :
+                        nivel += 1
+                        player.shape.center = constantes.SPAWN_NIVEL_1
+                        mundo.Reset_world((grupo_damage_text,grupo_balas,grupo_items))
+                        mundo.Process_list(list_tiles,nivel,32,(monedas_images,[pocion]),animaciones_enemigos)
+                        for items in mundo.list_items:
+                            grupo_items.add(items)
+                    else:
+                        juego_terminado = True
+                mundo.Update_mundo(posicion_ventana)
+                #actualizando al jugador
+                player.Update()
+                
+                #funciones del enemigo
+                #actualizar a los enemigos
+                for ene in mundo.list_enemigos:
+                    if ene.vida == 0:
+                        mundo.list_enemigos.remove(ene)
+                    else:
+                        ene.Movimiento_enemigos(posicion_ventana,mundo.list_obstaculos,player)
+                        ene.Update()
+                    #print(ene.vida)  
+                #actualiza el estado del arma
+                bala = arco.update(player)
+                if bala:
+                    grupo_balas.add(bala)
+                #dibujar balas
+                for bala in grupo_balas:
+                    bala.Draw_b(ventana)
+                    dano,posicion_dano = bala.update_b(mundo.list_enemigos,mundo.list_obstaculos)
+                    #print(grupo_balas)
+                    if dano:
+                        damage_text = Damage_text(posicion_dano.centerx ,posicion_dano.centery , str(dano), font ,constantes.COLOR_DAMAGE)
+                        grupo_damage_text.add(damage_text)
+                #actualizar daño
+                grupo_damage_text.update(posicion_ventana)
+                #actualizar items
+                grupo_items.update(player,posicion_ventana)
+            else:
+                text_game_over_rect = text_game_over.get_rect(center=(constantes.ANCHO/2,(constantes.ALTO/2)-150))
+                ventana.blit(text_game_over,text_game_over_rect)
+                text_reset_rect = text_reset.get_rect(center=(constantes.ANCHO/2,constantes.ALTO/3*2))
+                reset_rect = pygame.draw.rect(ventana,constantes.COLOR_GAME_OVER,text_reset_rect)
+                ventana.blit(text_reset,text_reset_rect)
+    pygame.display.update()
+    #update():se usa para actualizar la pantalla con cualquier cambio realizado en los elementos gráficos
 pygame.quit()
 #linea 180:)

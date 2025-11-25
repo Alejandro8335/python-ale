@@ -12,6 +12,10 @@ class Mundo:
         self.list_items = []
         self.list_enemigos = []
         self.pass_tile = None
+        self.list_tiles_x_izquierda = []
+        self.list_tiles_x_derecha = []
+        self.list_tiles_y_arriba = []
+        self.list_tiles_y_abajo = []
     def Process_list(self,list_tiles,nivel,largo_de_filas,list_frame_items,animacion_enemigos):
         self.imagenes_tiles = list_tiles
         for posicion , tile in enumerate(list_niveles[nivel]):
@@ -38,6 +42,15 @@ class Mundo:
                 self.list_obstaculos.append(imagen_rect)
             elif tile == pass_level:
                 self.pass_tile = imagen_rect
+            limite_ventana = constantes.LIMITE_VENTANA - 50
+            if posicion_x <=  limite_ventana:
+                self.list_tiles_x_izquierda.append(imagen_rect)
+            elif posicion_x >= 1550 - limite_ventana:
+                self.list_tiles_x_derecha.append(imagen_rect)
+            if posicion_y <= limite_ventana:
+                self.list_tiles_y_arriba.append(imagen_rect)
+            elif posicion_y >= 1100 - limite_ventana:
+                self.list_tiles_y_abajo.append(imagen_rect)
     def Cambiar_puerta(self,player):
         # x → posición horizontal (cuánto se mueve hacia la derecha).
         # y → posición vertical (cuánto se mueve hacia abajo).
@@ -64,7 +77,7 @@ class Mundo:
         for i in self.map:
             ventana.blit(i[0],i[1])
     def Reset_world(self,tuple_grupo):
-        for i in [self.list_enemigos,self.list_items,self.list_obstaculos,self.map]:
+        for i in [self.list_enemigos,self.list_items,self.list_obstaculos,self.map,self.list_tiles_x_derecha,self.list_tiles_x_izquierda,self.list_tiles_y_abajo,self.list_tiles_y_arriba]:
                 i.clear()
         for i in tuple_grupo:
             i.empty()

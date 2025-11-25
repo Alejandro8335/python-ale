@@ -91,7 +91,7 @@ class Personajes:
       if distancia < constantes.RANGO_ATAQUE and constantes.COOLDOWN_ATAQUE_ENEMIGOS < (pygame.time.get_ticks()-self.ultimo_golpe):
          player.vida -= 50
          self.ultimo_golpe = pygame.time.get_ticks()
-   def Movimiento_player(self, delta_x, delta_y,obstaculos_tiles,pass_tile):
+   def Movimiento_player(self, delta_x, delta_y,obstaculos_tiles,pass_tile,list_tiles_x_izquierda,list_tiles_x_derecha,list_tiles_y_arriba,list_tiles_y_abajo):
       if delta_x < 0:
          self.flip = True
       if delta_x > 0:
@@ -111,26 +111,50 @@ class Personajes:
             elif delta_y < 0:  # arriba
                   self.shape.top = obstaculo.bottom
       nivel_completado = None
-      if pass_tile.colliderect(self.shape):
+      if self.shape.colliderect(pass_tile):
          nivel_completado = True
       posicon_ventana = [0,0]
       limite_ventana = constantes.LIMITE_VENTANA
       diferencia_ancho_limite = constantes.ANCHO - limite_ventana
       izquierda_player = self.shape.left
       derecha_player = self.shape.right
+      colision_tile_x_izquierda = False
       if izquierda_player < limite_ventana:
-         posicon_ventana[0] = limite_ventana- izquierda_player
-         self.shape.left = limite_ventana
-      elif derecha_player > diferencia_ancho_limite:
-         posicon_ventana[0] = diferencia_ancho_limite- derecha_player
-         self.shape.right = diferencia_ancho_limite
+         for rect_tile in list_tiles_x_izquierda:
+            if self.shape.colliderect(rect_tile):
+               colision_tile_x_izquierda = True
+               break
+         if not colision_tile_x_izquierda:
+            posicon_ventana[0] = limite_ventana- izquierda_player
+            self.shape.left = limite_ventana
+      colision_tile_x_derecha = False
+      if derecha_player > diferencia_ancho_limite:
+         for rect_tile in list_tiles_x_derecha:
+            if self.shape.colliderect(rect_tile):
+               colision_tile_x_derecha = True
+               break
+         if not colision_tile_x_derecha:
+            posicon_ventana[0] = diferencia_ancho_limite- derecha_player
+            self.shape.right = diferencia_ancho_limite
       diferencia_alto_limite = constantes.ALTO - limite_ventana
       arriba_player = self.shape.top
       abajo_player = self.shape.bottom
+      colision_tile_y_arriba = False
       if arriba_player < limite_ventana:
-         posicon_ventana[1] = limite_ventana- arriba_player
-         self.shape.top = limite_ventana
-      elif abajo_player > diferencia_alto_limite:
-         posicon_ventana[1] = diferencia_alto_limite- abajo_player
-         self.shape.bottom = diferencia_alto_limite
+         for rect_tile in list_tiles_y_arriba:
+             if self.shape.colliderect(rect_tile):
+               colision_tile_y_arriba = True
+               break
+         if not colision_tile_y_arriba:
+            posicon_ventana[1] = limite_ventana- arriba_player
+            self.shape.top = limite_ventana
+      colision_tile_y_abajo = False
+      if abajo_player > diferencia_alto_limite:
+         for rect_tile in list_tiles_y_abajo:
+             if self.shape.colliderect(rect_tile):
+               colision_tile_y_abajo = True
+               break
+         if not colision_tile_y_abajo:
+            posicon_ventana[1] = diferencia_alto_limite- abajo_player
+            self.shape.bottom = diferencia_alto_limite
       return posicon_ventana,nivel_completado
