@@ -25,7 +25,7 @@ def escalar_img(imagen,ancho,alto):
 
 animaciones = []
 for i in range(2):
-    img = pygame.image.load(f"C:/Users/gabri/OneDrive/Desktop/ALE/python-ale/resumen_pygame/introducción/imagenes/personaje/player_{i}.png").convert_alpha()
+    img = pygame.image.load(fr"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introduccion\\imagenes\\personaje\\player_{i}.png").convert_alpha()
     img = escalar_img(img,constantes.ANCHO_PERSONAJE,constantes.ALTO_PERSONAJE)
     animaciones.append(img)
 
@@ -39,13 +39,13 @@ def Nombre(directorio):
     return os.listdir(directorio)
 
 #enemigos
-dirrectorio_enegigos = r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introducción\\imagenes\\enemigo"
+dirrectorio_enegigos = r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introduccion\\imagenes\\enemigo"
 tipos_enemigos = Nombre(dirrectorio_enegigos)
 animaciones_enemigos = []
 
 for eni in tipos_enemigos:
     lista_temp = []
-    ruta_temp = f"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introducción\\imagenes\\enemigo\\{eni}"
+    ruta_temp = f"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introduccion\\imagenes\\enemigo\\{eni}"
     num_animaciones = Contar(ruta_temp)
     for i in range(num_animaciones):
         img_enemigo = pygame.image.load(f"{ruta_temp}\\{i+1}.png").convert_alpha()
@@ -63,34 +63,34 @@ def Draw_grid():
 #creando al jugador de la clase personaje
 player =  Personajes(constantes.SPAWN_NIVEL_0[0], constantes.SPAWN_NIVEL_0[1], animaciones,constantes.VIDA_PERSONAJE,1,constantes.ANCHO_PERSONAJE,constantes.ALTO_PERSONAJE)# son las coordenadas
 #imagenes arco
-img_arco = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\armas\\arco.png").convert_alpha()
+img_arco = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\imagenes\\armas\\arco.png").convert_alpha()
 img_arco_escalado = escalar_img(img_arco, constantes.ANCHO_ARMA, constantes.ALTO_ARMA)
 
 #imagenes de la balas
-img_balas = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\armas\\flecha.png").convert_alpha()
+img_balas = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\imagenes\\armas\\flecha.png").convert_alpha()
 img_balas_escalado = escalar_img(img_balas, 35, 16)
 
 #creando un arma de la clase weapon
 arco = Weapon(img_arco_escalado,img_balas_escalado)
 
 #carga imagenes de los items
-pocion = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\posion.png").convert_alpha()
+pocion = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\items\\posion.png").convert_alpha()
 pocion = escalar_img(pocion,constantes.ANCHO_POCION,constantes.ALTO_POCION)
 
 monedas_images = []
-ruta_monedas = r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\moneda_"
+ruta_monedas = r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\items\\moneda_"
 num_monedas = 4
 for i in range(num_monedas):
-    img = pygame.image.load(fr"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\moneda_{i}.png").convert_alpha()
+    img = pygame.image.load(fr"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\items\\moneda_{i}.png").convert_alpha()
     img = escalar_img(img,constantes.ANCHO_MONEDAS,constantes.ALTO_MONEDAS)
     monedas_images.append(img)
 
 #fuentes
-font = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 22)#el segundo valor es el tamaño
-font_coins = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 18)
-font_game_over = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 100)
-font_reset = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 75)
-font_sonido = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\imagenes\\fuente.ttf", 25)
+font = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\imagenes\\fuente.ttf", 22)#el segundo valor es el tamaño
+font_coins = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\imagenes\\fuente.ttf", 18)
+font_game_over = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\imagenes\\fuente.ttf", 100)
+font_reset = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\imagenes\\fuente.ttf", 75)
+font_sonido = pygame.font.Font(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\imagenes\\fuente.ttf", 25)
 text_game_over = font_game_over.render("game over",True,constantes.COLOR_GAME_OVER)
 text_reset = font_reset.render("reset",True,constantes.COLOR_BLANCO)
 text_game = font_reset.render("play",True,constantes.COLOR_COINS)
@@ -116,11 +116,11 @@ def Ajustes():
 grupo_damage_text = pygame.sprite.Group()
 grupo_balas = pygame.sprite.Group()
 #corazones
-corazon_lleno = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\corazon_lleno.png").convert_alpha()
+corazon_lleno = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\items\\corazon_lleno.png").convert_alpha()
 corazon_lleno = escalar_img(corazon_lleno,constantes.ANCHO_CORAZONES,constantes.ALTO_CORAZONES)
-corazon_medio = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\corazon_medio.png").convert_alpha()
+corazon_medio = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\items\\corazon_medio.png").convert_alpha()
 corazon_medio = escalar_img(corazon_medio,constantes.ANCHO_CORAZONES,constantes.ALTO_CORAZONES)
-corazon_vacio = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\items\\corazon_vacio.png").convert_alpha()
+corazon_vacio = pygame.image.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\items\\corazon_vacio.png").convert_alpha()
 corazon_vacio = escalar_img(corazon_vacio,constantes.ANCHO_CORAZONES,constantes.ALTO_CORAZONES)
 
 def dibujar_texto(texto, font, color, x, y):
@@ -137,8 +137,8 @@ def Vida_player():
         else:
             ventana.blit(corazon_vacio,(5+i*25,7))
 list_tiles = []
-for i in range(Contar(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\tiles")):
-    imagen = pygame.image.load(fr"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introducción\\tiles\\{i}.png")
+for i in range(Contar(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\tiles")):
+    imagen = pygame.image.load(fr"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ALE\\resumen_pygame\\introduccion\\tiles\\{i}.png")
     imagen = pygame.transform.scale(imagen,(constantes.TILE_SIZE,constantes.TILE_SIZE))
     list_tiles.append(imagen)
 # creando un objeto Mundo
@@ -153,12 +153,12 @@ for items in mundo.list_items:
 reloj = pygame.time.Clock()
 # pygame.mixer.music está pensado para música larga o de fondo, 
 # y solo puede manejar una pista a la vez.
-pygame.mixer.music.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introducción\\sonidos\\ambiente.mp3")
+pygame.mixer.music.load(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introduccion\\sonidos\\ambiente.mp3")
 # Reproducir música (loop=0 significa una vez, -1 significa infinito)
 pygame.mixer.music.play(loops=-1)
 # pygame.mixer.Sound() → crea un objeto de sonido a partir de un archivo.
-sonido_pasos = pygame.mixer.Sound(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introducción\\sonidos\\pasos.mp3")
-sonido_puertas = pygame.mixer.Sound(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introducción\\sonidos\\puertas.mp3")
+sonido_pasos = pygame.mixer.Sound(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introduccion\\sonidos\\pasos.mp3")
+sonido_puertas = pygame.mixer.Sound(r"C:\\Users\\gabri\\OneDrive\\Desktop\\ALE\\python-ale\\resumen_pygame\\introduccion\\sonidos\\puertas.mp3")
 sonido_puertas.set_volume(0.50)# 1 = 100%
 # A diferencia de la música, los efectos de sonido pueden reproducirse varias veces y 
 # en paralelo (por ejemplo, pasos + puertas al mismo tiempo).
