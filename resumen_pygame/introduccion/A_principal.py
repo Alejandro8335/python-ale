@@ -262,8 +262,8 @@ while running:
                             for items in mundo.list_items:
                                 grupo_items.add(items)
                     elif event.button == 3: 
-                        mundo.Cambiar_puerta(player)
-                        if sonido:
+                        puerta_abierta_bool = mundo.Cambiar_puerta(player)
+                        if sonido and puerta_abierta_bool:
                             sonido_puertas.play()
                     # 1 → Botón izquierdo
                     # 2 → Botón del medio (rueda)

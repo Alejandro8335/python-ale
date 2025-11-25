@@ -65,10 +65,13 @@ class Mundo:
                     tile[0] = self.imagenes_tiles[6]
                     if tile[1] in self.list_obstaculos:
                         self.list_obstaculos.remove(tile[1])
+                    return True
                 elif tile[4] == 6:
                     tile[4] = 5
                     tile[0] = self.imagenes_tiles[5]
                     self.list_obstaculos.append(tile[1])
+                    return True
+        return False
     def Update_mundo(self,list_position_player):
         if self.map:
             for tile in self.map:
