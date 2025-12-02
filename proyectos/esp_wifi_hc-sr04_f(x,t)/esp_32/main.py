@@ -31,7 +31,7 @@ async def Assembler(reader,writer):
                 print(f"valor que manda el cliente :{data_recv}")
             if not sending_msj:
                 sending_msj = True
-                await wifi.Send_to_the_client(asyncio.create_task(sensor.Sendpulse_cm()))
+                await wifi.Send_to_the_client(await asyncio.create_task(sensor.Sendpulse_cm()))
                 sending_msj = False
             await asyncio.sleep(0.1)
         except Exception as e:

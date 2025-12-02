@@ -5,7 +5,7 @@ lista =list(("hola","ale",15))
 cantidad_elementos = len(lista)
 
 #agregando un elemento a la lista 
-lista.append("nuevo","hola")
+lista.append("nuevo")
 
 #agregando un elemento a la lista en un indice en especifico
 lista.insert(2,"nuevo2")
@@ -32,4 +32,13 @@ lista.reverse()
 #verificando si un elemento se encuentra en la lista 
 elementos_encontrado = lista.index("ale")
 
+a = [5, 4, 4]
+b = a.copy()
+b[0] = 99
+print(a)  # Resultado: [5, 4, 4]
+print(b)  # Resultado: [99, 4, 4]
+print(id(a), id(b))
+
+colores = ["rojo", "azul", "rojo", "verde", "rojo"]
+resultado = colores.count("rojo")   # Resultado: 3
 print(lista)

@@ -26,15 +26,13 @@ resto2 = -12 % 5 # devuelve 3
 #-12 dividido por 5 da -3 con un resto de 3.
 #Porque -3 * 5 = -15, y -12 - (-15) = 3.
 
+######
 #OPERADORES DE COMPARACION (devuelven true or false)
  
 igual_que=  5 == 6 #false
-
-distinto_que = 5 != 6 #true
-distinto_que_2 = 5 =! 6
-print(distinto_que_2)
 # != Compara si dos valores son distintos
-# =! Se interpreta como = not, no compara
+distinto_que = 5 != 6 #true
+
 mayor_que = 5>6 #false
 
 menor_que = 5<6 #true
@@ -43,6 +41,9 @@ mayor_o_igual= 5>=6 #false
 
 menor_o_igual= 5 <= 6 #true
 
+(a := 5) == 5   # guarda 5 en a y además compara si es igual a 5
+# lo pone en la caja y además lo muestra/retorna en ese mismo momento dentro de la expresión.
+######
 # OPERADORES LOGICOS
 
 # and
@@ -102,7 +103,6 @@ resultado24 = 20 >> 2  # 5
 
 print(resultado20)
 
-#MAS
 # +=, -=, *=, /=, //=, %=, **=, &=, |=, ^=, <<=, >>=
 x = 10
 x -= 3  # Equivalente a x = x - 3
@@ -111,6 +111,26 @@ x -= 3  # Equivalente a x = x - 3
 x = 10
 x += 3  # Equivalente a x = x + 3
 # print(x)  # Resultado: 13
+
+a = 6      # binario: 110
+a &= 3     # binario: 011
+# print(a)   # resultado: 2 (binario 010)
+
+a = 6      # binario: 110
+a |= 3     # binario: 011
+# print(a)   # resultado: 7 (binario 111)
+
+a = 6      # binario: 110
+a ^= 3     # binario: 011
+# print(a)   # resultado: 5 (binario 101)
+
+a = 3      # binario: 011
+a <<= 2    # desplaza 2 bits a la izquierda → 1100
+# print(a)   # resultado: 12
+
+a = 12     # binario: 1100
+a >>= 2    # desplaza 2 bits a la derecha → 0011
+# print(a)   # resultado: 3
 
 # raices :
 # x ** (1/n)
