@@ -30,5 +30,6 @@
 
 # s.join(lista) → une elementos de una lista en una cadena.
 
-x = "hola ale"
-print(x.split())
+print("hola"*2)
+print("hola"*0)
+print("hola"*-2)

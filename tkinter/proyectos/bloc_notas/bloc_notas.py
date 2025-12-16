@@ -44,14 +44,11 @@ def save_as_file():
             messagebox.showerror("Error de Guardado", "El archivo se no guardó correctamente.")
             
 # Funciones para las opciones de editar
-def copy():
-    texto.event_generate("<<Copy>>")
+def copy():texto.event_generate("<<Copy>>")
 
-def paste():
-    texto.event_generate("<<Paste>>")
+def paste():texto.event_generate("<<Paste>>")
 
-def cut():
-    texto.event_generate("<<Cut>>")
+def cut():texto.event_generate("<<Cut>>")
 
 # configuraciones de la ventana
 ventana = tk.Tk()

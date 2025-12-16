@@ -44,6 +44,8 @@
 # -W ves los warning ir a F_filterwarning.py para entender mejor
 
 # -x Si querés parar en el primer error:
+
+# --maxfail=2 → es otra opción que indica que se detenga después de 2 fallos.
 # pytest -v -rs -s -W always "C:\Users\gabri\OneDrive\Desktop\ALE\python-ale\test\pytest\@pytest.mark\def\.py"
 
 #######################################################

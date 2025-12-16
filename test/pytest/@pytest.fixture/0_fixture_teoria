@@ -1,0 +1,31 @@
+📌 Qué son los fixtures
+Son funciones especiales que pytest ejecuta antes y después de un test.
+
+Sirven para preparar datos, recursos o entorno (setup) y opcionalmente limpiar (teardown).
+
+Se definen con @pytest.fixture.
+
+⚙️ Ciclo de vida
+Por defecto, se ejecutan una vez por cada test (scope="function").
+
+🔄 Formas de usar un fixture
+Como argumento en el test → el test recibe el valor retornado por el fixture.
+
+Con @pytest.mark.usefixtures → el fixture se ejecuta, pero el test no recibe nada (solo efectos secundarios).
+
+📌 yield vs return
+return → el fixture devuelve un valor al test, sin lógica de limpieza.
+
+yield → permite definir setup antes del yield y teardown después del yield. Ejemplo típico: abrir conexión antes, cerrarla después.
+
+🎯 En resumen
+Los fixtures son la forma estándar en pytest de manejar setup/teardown y datos 
+compartidos.
+
+Se ejecutan antes y después del test según su scope.
+
+Podés usarlos como argumentos (inyectan datos) o con usefixtures (solo efectos secundarios).
+
+Con params podés repetir tests con distintos valores.
+
+Con yield podés controlar el ciclo completo de preparación y limpieza.

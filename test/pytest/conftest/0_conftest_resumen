@@ -1,0 +1,12 @@
+🔹 conftest.py: sirve para centralizar fixtures y hooks compartidos, accesibles 
+sin necesidad de importarlos.
+
+🔹 Fixtures globales (ej. scope="session" o "module"): conviene definirlos en 
+conftest.py porque se usan en muchos tests.
+
+🔹 Fixtures locales (ej. scope="function" o muy específicos): mejor definirlos 
+directamente en el archivo de test o en un conftest.py dentro de la carpeta 
+correspondiente.
+
+🔹 Buena práctica: usar el conftest.py raíz para lo común y crear conftest.py 
+adicionales en subcarpetas para configuraciones específicas.
