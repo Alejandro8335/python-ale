@@ -29,3 +29,15 @@ Podés usarlos como argumentos (inyectan datos) o con usefixtures (solo efectos 
 Con params podés repetir tests con distintos valores.
 
 Con yield podés controlar el ciclo completo de preparación y limpieza.
+
+===================================================================
+
+Si quitas el yield:
+
+@pytest.fixture
+def f():
+    print("setup")
+
+Verás:
+setup
+setup

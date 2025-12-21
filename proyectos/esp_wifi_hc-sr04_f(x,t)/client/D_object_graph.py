@@ -9,7 +9,7 @@ class Graph():
         self.X_data = []
         self.Y_data = []
         # start time and data the axis y
-        self.start_time = time()
+        self.start_time = False
         self.open_state = False
         self.data_consumer_state = False
     def Graph_open(self):
@@ -38,6 +38,7 @@ class Graph():
     async def Data_consumer(self):
         if not self.data_consumer_state:
             self.data_consumer_state = True
+            self.start_time = time()
             try:
                 while self.data_consumer_state:
                     try:
@@ -45,7 +46,7 @@ class Graph():
                         print(data)
                         if data == None:  # señal de fin
                             break
-                        if data:
+                        elif data:
                             self.X_data.append(time()-self.start_time)
                             self.Y_data.append(float(data))
                     except Exception as e:

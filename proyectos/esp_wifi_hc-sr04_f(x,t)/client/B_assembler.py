@@ -1,17 +1,14 @@
 import tkinter as tk
 import asyncio
 # modulos
-from C_object_client import Clint
-from D_object_graph import Graph
+
 
 class Assembler:
-    def __init__(self,ESP32_IP, ESP32_PORT):
-        # communication channel
-        self.queue = asyncio.Queue()
-        # creating a Client object
-        self.Clint = Clint(ESP32_IP, ESP32_PORT,self.queue)
-        # creating a Graph object
-        self.Graph = Graph(self.queue)
+    def __init__(self,Client,Graph ):
+        # Client object
+        self.Clint = Client
+        # Graph object
+        self.Graph = Graph
     
     async def Root_open(self):
         # creating rood and set the rood
@@ -31,10 +28,11 @@ class Assembler:
                     ("Graph open",lambda:self.Assembler_open_graph(label_graph),3,0),
                     ("Graph close",lambda:self.Assembler_close_graph(label_graph),3,1)]
         
+        self.set_bts = {}
         for text_ , command_ , row_,column_ in list_btn:
             btn = tk.Button(root,text=text_,command=command_)
             btn.grid(row=row_,column=column_,sticky="nsew")
-            
+            self.set_bts[text_] = btn
         # expandable columns and rows
         for i in range(4):
             root.grid_rowconfigure(i, weight=1)

@@ -1,6 +1,7 @@
-# pytest "c:\Users\gabri\OneDrive\Desktop\ALE\python-ale\tkinter\proyectos\calculadora\test_individuales_calculadora.py"
+# pytest "c:\Users\gabri\OneDrive\Desktop\ALE\python-ale\tkinter\proyectos\calculadora\test_calculadora\test_individuales_calculadora.py"
 import pytest
 import re
+from sympy import sympify
 @pytest.mark.parametrize("entry, resultado_esperado",[
     ("",""),
     ("4+","4+"),
@@ -32,7 +33,7 @@ def test_operaciones(signo,entry,resultado_esperado):
     str_ = entry
     if (signo == "+")and str_ and (str_[-1] == "-"): # saca el signo - si se pone +
         str_ = str_[:-1]
-            
+
     elif str_:
         match str_:
             case x if (x[-1] in "+-*/%.("):  # Evita operadores consecutivos
@@ -40,13 +41,14 @@ def test_operaciones(signo,entry,resultado_esperado):
                     str_ = str_[:-1]
                     str_ += signo
 
-            case _: # Caso general
+            case x if x is not None:
                 str_ += signo
     assert str_ == resultado_esperado
 @pytest.mark.parametrize("entry, resultado_esperado",[
     ("","-"),
     ("-15*","-15*-"),
-    ("15+","15-")])
+    ("15+","15-"),
+    ("50-","50-")])
 def test_sustraccion(entry,resultado_esperado):
     # Permite el signo negativo al inicio pero evalua que no se repitan los signos -
     match entry:
@@ -117,7 +119,7 @@ def test_calcular(entry,contenido_antes_eval,resultado_despues_eval):
         contenido = contenido[:pos] + "/100*" + contenido[pos+1:]#con + 1 me desplazo un caracter para eliminarlo (%)
         # % = /100 se pone al final de la expresion
     assert contenido == contenido_antes_eval
-    resultado = eval(contenido)# interpreta el contenido de la cadena como si fuera código Python y lo ejecuta en tiempo real.
+    resultado = sympify(contenido)
     if resultado % 1 == 0:
         resultado = int(resultado)
     else:

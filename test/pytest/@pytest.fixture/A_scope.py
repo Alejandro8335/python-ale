@@ -3,6 +3,13 @@ import pytest
 # dura y cuántas veces se ejecuta durante la corrida de tests. Las opciones son:
 
 # Sin scope: equivale a scope="function".
+
+# Regla práctica
+# scope="module" + @pytest.mark.parametrize → fixture creado 1 vez por módulo, reutilizado en todas las ejecuciones parametrizadas.
+
+# scope="module" + fixture(params=...) → fixture creado 1 vez por cada parámetro (por módulo), y cada instancia se comparte entre tests.
+
+# scope="function" → fixture creado en cada ejecución del test, incluyendo cada caso parametrizado.
 #######################################################
 
 # Duración: se crea y destruye para cada test individual.
@@ -30,10 +37,15 @@ def conexion_api():
 # archivo.
 
 @pytest.fixture(scope="module")
-def conexion_db():
-    print("Conecto a la base de datos")
-    yield
-    print("Cierro conexión")
+def recurso():
+    print("SETUP recurso")
+    return {"status": "ok"}
+
+@pytest.mark.parametrize("x", [1, 2, 3])
+def test_ejemplo(recurso, x):
+    print("TEST con x =", x, "y recurso id:", id(recurso))# es el mismo objeto
+    assert recurso["status"] == "ok"
+
 
 #######################################################
 
@@ -46,3 +58,12 @@ def servidor():
     print("Levanto servidor")
     yield
     print("Apago servidor")
+
+#######################################################
+
+# Duración: se crea una vez por paquete de tests
+# Uso típico: datos compartidos entre todos los tests del mismo paquete
+@pytest.fixture(scope="package")
+def usuario():
+    print("Creo usuario del paquete")
+    return {"nombre": "Alejandro"}

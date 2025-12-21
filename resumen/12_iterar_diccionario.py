@@ -15,4 +15,7 @@ for datos in diccionario.items():
     value = datos[1]
     print(f"la clave es: {key} y el valor es: {value}")
     
-                                                                            
+diccionario_nombres_edad = {}
+for nombres, edad in [("ale",15),("facha",20),("pana",25)]:
+    diccionario_nombres_edad[nombres] = edad
+print(diccionario_nombres_edad)

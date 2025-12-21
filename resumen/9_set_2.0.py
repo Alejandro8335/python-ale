@@ -24,3 +24,6 @@ resultado_4 = conjunto_2.isdisjoint(conjunto_1)
 #si hay un elemento en comun devuelve false si no devuelve true
 
 print(resultado_4)
+
+# lo principal de un set es que no permite que halla el mismo elemento esto es 
+# la clave de los dicconarios pq permite que no halla la misma key

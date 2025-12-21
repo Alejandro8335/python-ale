@@ -1,7 +1,7 @@
 import asyncio
 import socket
 #sock_connect, sock_sendall, sock_recv → son las versiones asincrónicas correctas.
-class Clint():
+class Client():
     def __init__(self,ESP32_IP, ESP32_PORT,Queue_obj):
         self.IP = ESP32_IP
         self.PORT = ESP32_PORT
