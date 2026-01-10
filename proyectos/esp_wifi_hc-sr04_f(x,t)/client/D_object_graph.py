@@ -9,7 +9,6 @@ class Graph():
         self.X_data = []
         self.Y_data = []
         # start time and data the axis y
-        self.start_time = False
         self.open_state = False
         self.data_consumer_state = False
     def Graph_open(self):
@@ -44,12 +43,16 @@ class Graph():
                     try:
                         data = await self.queue.get()
                         print(data)
-                        if data == None:  # señal de fin
+                        if data is None:  # señal de fin
+                            self.queue.task_done()
                             break
-                        elif data:
+                        else:
                             self.X_data.append(time()-self.start_time)
-                            self.Y_data.append(float(data))
+                            self.Y_data.append(round(float(data),5))
+                            self.queue.task_done()# es para el test y es opcional,
+                            # actualmente este codigo no lo usa
                     except Exception as e:
+                        self.data_consumer_state = False
                         print(e)
             finally:
                 self.data_consumer_state = False

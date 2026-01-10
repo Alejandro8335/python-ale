@@ -1,4 +1,5 @@
 import asyncio
+import tkinter as tk
 from B_assembler import Assembler
 from C_object_client import Client
 from D_object_graph import Graph
@@ -15,7 +16,17 @@ client = Client(ESP_IP,ESP_PORT,queue)
 graph = Graph(queue)
 
 # create Assembler object and set Assembler
-assembler = Assembler(client,graph)
+assembler = Assembler(client,graph,queue)
 
 if __name__ == "__main__":
-    asyncio.run(assembler.Root_open())
+    root , _ , _ , _ = assembler.Root_open()
+    # Integrate Asyncio with Tkinter
+    async def Root_update():
+        while assembler._running:
+            try:
+                root.update()
+            except tk.TclError:
+                # ventana destruida
+                break
+            await asyncio.sleep(0.01)
+    asyncio.run(Root_update())

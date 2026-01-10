@@ -39,9 +39,8 @@ class Client():
     # def the Send and Recv
     async def Send_to_the_server(self,msj):
         try:
-            loop = asyncio.get_running_loop()
             async with self.send_lock: 
-                await loop.sock_sendall(self.socker, msj.encode())
+                await asyncio.get_running_loop().sock_sendall(self.socker, msj.encode())
         except Exception as e:
             print(e)
             self.connect_state = False

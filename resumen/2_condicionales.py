@@ -47,12 +47,23 @@ if ingreso_mensual > 10000:
 #Varios if	|✅ Sí
 #if + elif	|❌ No, solo la primera verdadera
 
-#max y min
-max(3, 7, 1)
-7
-
-min([10, 4, 15, 2])
-2
-
 if 1:
     print("si")
+ 
+a = [1, 2, 3]
+b = [1, 2, 3]
+
+print(a == b)   # True, porque tienen el mismo contenido
+print(a is b)   # False, porque son listas distintas en memoria
+
+x = True
+y = True
+
+print(x == y)   # True, mismo valor
+print(x is y)   # True, misma identidad (es el mismo objeto)
+
+x = None
+y = None
+
+print(x == y)   # True
+print(x is y)   # True, ambos apuntan al único objeto None
