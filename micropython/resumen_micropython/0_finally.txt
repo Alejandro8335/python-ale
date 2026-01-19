@@ -1,0 +1,2 @@
+si la interrupción es controlada (por ejemplo, un KeyboardInterrupt con Ctrl+C), el finally sí se ejecuta, 
+porque la excepción se lanza dentro del flujo normal de Python y el intérprete puede cerrar ordenadamente.

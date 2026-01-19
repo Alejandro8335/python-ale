@@ -1,0 +1,5 @@
+raise → marca error inesperado.
+
+pytest.fail() → marca fallo controlado.
+
+pytest.raises → prueba que tu código realmente lanza la excepción esperada.

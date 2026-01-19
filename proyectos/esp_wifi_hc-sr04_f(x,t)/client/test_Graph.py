@@ -14,14 +14,14 @@ def fixture_pass_obj_Graph():
 def test_Graph_open(fixture_pass_obj_Graph):
     queue,graph = fixture_pass_obj_Graph
     if graph.open_state:
-        raise ValueError("The window is open; the test cannot open another window.")
+        pytest.fail("The window is open; the test cannot open another window.")
     graph.Graph_open()
     assert graph.open_state
 
 def test_Graph_close(fixture_pass_obj_Graph):
     queue,graph = fixture_pass_obj_Graph
     if not graph.open_state:
-        raise ValueError("The window is closed; the test cannot closed a window that does not exist.")
+        pytest.fail("The window is closed; the test cannot closed a window that does not exist.")
     graph.Graph_close()
     assert not graph.open_state
 
@@ -92,7 +92,7 @@ async def test_Graph_Data_consumer(async_fixture_pass_obj_Graph,tuple_of_datas):
                 elif data_consumer_state is False:
                     assert graph.data_consumer_state is False
                 else:
-                    raise TypeError("The data_consumer_state is not true or false")
+                    pytest.fail("The data_consumer_state is not true or false")
     except Exception as e:
         raise e
     finally:

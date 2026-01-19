@@ -6,10 +6,11 @@ import time as tm
 class Assembler:
     def __init__(self,Client,Graph,queue):
         # Client object
-        self.Clint = Client
+        self.Client = Client
         # Graph object
         self.Graph = Graph
         self.queue = queue
+        self.second_window = False
     def Root_open(self):
         # creating rood and set the rood
         root = tk.Tk()
@@ -20,15 +21,15 @@ class Assembler:
         entry.grid(row=5, column=0, columnspan=2, sticky="nsew")
         entry.insert(0,"send to server")
         # creating label
-        label_clint = tk.Label(root,font=("arial",12,"bold"),text="disconnect")
-        label_clint.grid(row=0, column=0, columnspan=2, sticky="nsew")
+        label_Client = tk.Label(root,font=("arial",12,"bold"),text="disconnect")
+        label_Client.grid(row=0, column=0, columnspan=2, sticky="nsew")
         label_graph = tk.Label(root,font=("arial",12,"bold"),text="close")
         label_graph.grid(row=2, column=0, columnspan=2, sticky="nsew")
         
-        set_label = {label_clint,label_graph}
+        set_label = {label_Client,label_graph}
         # creating button
-        list_btn = [("Connect",lambda: asyncio.get_event_loop().create_task(self.Assembler_connect(label_clint,root)),1,0,1),
-                    ("Disconnect",lambda: self.Assembler_disconnect(label_clint),1,1,1),
+        list_btn = [("Connect",lambda: asyncio.get_event_loop().create_task(self.Assembler_connect(label_Client,root)),1,0,1),
+                    ("Disconnect",lambda: self.Assembler_disconnect(label_Client),1,1,1),
                     ("Graph open",lambda:self.Assembler_open_graph(label_graph),3,0,1),
                     ("Graph close",lambda:self.Assembler_close_graph(label_graph),3,1,1),
                     ("send",lambda:self.Assembler_send_to_serve(entry),6,0,2)]
@@ -50,43 +51,48 @@ class Assembler:
 
         return root ,set_bts ,set_label ,entry
     
-    async def Assembler_connect(self, label_clint,root):
-        await self.Clint.Connect()
-        if self.Clint.connect_state and not self.def_connect_state and self.second_window is False:
-            asyncio.create_task(self.Clint.Recv_to_the_server())
-            label_clint.config(text="connect")
+    async def Assembler_connect(self, label_Client,root):
+        await self.Client.Connect()
+        if self.Client.connect_state and not self.Client.def_connect_state and self.second_window is False:
+            asyncio.create_task(self.Client.Recv_to_the_server())
+            self.second_window = True
+            label_Client.config(text="connect")
             second_window = tk.Toplevel(root)
+            second_window.geometry("50x100")
             label_passwordstate = tk.Label(second_window)
             label_passwordstate.grid(row=0, column=0, sticky="nsew")
             entry_passwordstate = tk.Entry(second_window)
-            entry_passwordstate.grid(row=0, column=1, sticky="nsew")
-            entry_passwordstate.insert("Enter the password")
+            entry_passwordstate.grid(row=1, column=0, sticky="nsew")
+            entry_passwordstate.insert(0,"Enter the password")
             button_passwordstate = tk.Button(second_window,text="send",command=lambda: self.Assembler_send_to_serve(entry_passwordstate))
-            button_passwordstate.grid(row=0,column=2,sticky="nsew")
-            self.second_window = True
-            for _ in range(6100):
+            button_passwordstate.grid(row=2,column=0,sticky="nsew")
+            for i in range(3):
+                second_window.grid_rowconfigure(i, weight=1)
+            second_window.grid_columnconfigure(0, weight=1)
+            while self.Client.connect_state is True:
                 try:
                     data = await asyncio.wait_for(self.queue.get(),timeout=2)
-                except TimeoutError:
-                    pass
+                except asyncio.TimeoutError:
+                    data = None
+                except Exception as e: print(e)
                 if data is True:
                     asyncio.create_task(self.Graph.Data_consumer())
                     second_window.destroy()
                     self.second_window = False
                 elif data is False:
-                    if self.Clint.def_recv_state:
-                        await asyncio.create_task(self.queue.put(None))
+                    self.Client.connect_state = False
                     second_window.destroy()
                     self.second_window = False
-                    label_clint.config(text="disconnect")
+                    label_Client.config(text="disconnect")
+                    break
                 elif data == "Incorrect password":
                     label_passwordstate.config(text="Incorrect password")
-                tm.sleep(0.01)
+                await asyncio.sleep(0.01)
             
             
-    def Assembler_disconnect(self,label_clint):
-        self.Clint.Disconnect()
-        label_clint.config(text="disconnect")
+    def Assembler_disconnect(self,label_Client):
+        self.Client.Disconnect()
+        label_Client.config(text="disconnect")
         
     def Assembler_open_graph(self,label_graph):
         self.Graph.Graph_open()
@@ -97,11 +103,12 @@ class Assembler:
         label_graph.config(text="close")
     
     def Assembler_send_to_serve(self,entry):
-        if self.Clint.def_connect_state:
-            asyncio.create_task(self.Clint.Send_to_the_server(entry.get()))
+        if self.Client.connect_state:
+            asyncio.create_task(self.Client.Send_to_the_server(entry.get()))
+            
     def On_closing(self):
         self._running = False
-        if self.Clint.def_connect_state:
-            self.Clint.Disconnect()
-        if self.Clint.def_recv_state:
+        if self.Client.connect_state:
+            self.Client.Disconnect()
+        if self.Client.def_recv_state:
             asyncio.create_task(self.queue.put(None))

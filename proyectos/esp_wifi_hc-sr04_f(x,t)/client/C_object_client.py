@@ -25,6 +25,7 @@ class Client():
                 print("connect")
         except Exception as e:
             self.def_connect_state = False
+            self.connect_state = False
             print(e)
             
     def Disconnect(self):
@@ -32,6 +33,7 @@ class Client():
             if self.connect_state:
                 self.socker.close()
                 self.connect_state = False
+                self.def_recv_state = False
                 print("disconnect")
         except Exception as e:
             print(e)
@@ -39,11 +41,14 @@ class Client():
     # def the Send and Recv
     async def Send_to_the_server(self,msj):
         try:
-            async with self.send_lock: 
-                await asyncio.get_running_loop().sock_sendall(self.socker, msj.encode())
+            if self.connect_state:
+                async with self.send_lock: 
+                    await asyncio.get_running_loop().sock_sendall(self.socker, msj.encode())
+                    print("el mjs okey")
         except Exception as e:
             print(e)
             self.connect_state = False
+            self.socker.close()
         
     async def Recv_to_the_server(self):
         loop = asyncio.get_running_loop()
@@ -51,18 +56,29 @@ class Client():
             self.def_recv_state = True
             print("recv ok")
             try:
+                buffer = b""
+                if self.connect_state and self.def_recv_state:
+                    print("recv ok2")
                 while self.connect_state and self.def_recv_state:
                     try:
-                        data = await loop.sock_recv(self.socker, 64)
+                        data = await loop.sock_recv(self.socker, 1024)
+                        print("dataaaaaa")
                         if not data: # pq quiere decir que el server cerro la conexión 
                             await self.queue.put(None)  # señal de fin
                             self.connect_state = False
                             self.def_recv_state = False
                             break
-                        list_data = data.decode().split()
-                        for _data_ in list_data:
-                            await self.queue.put(_data_.strip())
-                        # no puedo usar return pq me saca del bucle
+                        buffer += data
+                        while b"\n" in buffer:
+                            line, buffer = buffer.split(b"\n", 1) 
+                            text = line.decode().strip() 
+                            # normalizar a tipos: convertir "True"/"False" a booleanos 
+                            if text == "True": 
+                                await self.queue.put(True)
+                            elif text == "False":
+                                await self.queue.put(False) 
+                            else: 
+                                await self.queue.put(text)
                     except Exception as e:
                         print(e)
                         self.connect_state = False

@@ -24,7 +24,7 @@ if __name__ == "__main__":
     async def Root_update():
         while assembler._running:
             try:
-                root.update()
+                root.update_idletasks()
             except tk.TclError:
                 # ventana destruida
                 break

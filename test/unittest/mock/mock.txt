@@ -1,0 +1,19 @@
+🔹 Mock → cuando solo necesitás simular métodos/atributos simples.
+
+🔹 MagicMock → cuando tu objeto simulado debe comportarse como listas, 
+    diccionarios o context managers.
+
+🔹 patch / patch.object → cuando el código bajo prueba importa directamente una función/clase y 
+    no podés inyectar la dependencia.
+
+🔹 side_effect → cuando querés simular excepciones, secuencias de valores o lógica personalizada.
+
+🔹 return_value → cuando el mock siempre debe devolver lo mismo.
+
+🔹 assert_called_with / assert_has_calls / call → cuando querés verificar que las llamadas se 
+    hicieron con los argumentos correctos y en el orden esperado.
+
+🔹 create_autospec → cuando querés que el mock respete la firma del objeto real y 
+    te avise si usás parámetros incorrectos.
+    
+🔹 mock_open → cuando necesitás simular lectura/escritura de archivos sin tocar el disco.

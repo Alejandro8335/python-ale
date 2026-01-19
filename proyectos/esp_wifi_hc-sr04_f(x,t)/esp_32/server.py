@@ -1,30 +1,36 @@
-import uasyncio as asyncio
+import uasyncio
 class Wifi_sta_server:
-    def __init__(self, reader, writer):
-        self.reader = reader
-        self.writer = writer
+    def __init__(self, client):
+        self.client = client
         self.client_state = True
-        self.lock = asyncio.Lock()
+        self.lock = uasyncio.Lock()
+        self.list_recv = []
     async def Send_to_the_client(self, msj):
         try:
-            async with self.lock:
-                self.writer.write(str(msj).encode())
-                await self.writer.drain()
+            print("enviando msj")
+            self.client.send((str(msj) + "\n").encode())
         except Exception as e:
             print("in server,error send_to_the_client", e)
             self.client_state = False
-    async def Recv_to_the_client(self,list_recv):
-        try:
-            while self.client_state:
-                data = await self.reader.read(64)
+            
+    async def Recv_to_the_client(self):
+        print("intentando resivir msj")
+        self.client.setblocking(False)
+        while self.client_state:
+            try:
+                data = self.client.recv(1024)
+                if isinstance(data, bytes):
+                    data = data.decode()
+                data = data.strip()
                 if not data:  # conexión cerrada
                     self.client_state = False
                     break
-                list_recv.append(data)
-        except Exception as e:
-            print(e)
-            self.client_state = False
-        try:
-            await self.writer.aclose()
-        except:
-            pass
+                self.list_recv.append(data)
+                print("msj okey")
+            except OSError as e: 
+                if e.args[0] == errno.EAGAIN: # no hay datos disponibles 
+                    await uasyncio.sleep(0.1) # ceder al loop y reintentar
+                    continue 
+                else: 
+                    print("in server,error Recv_to_the_client", e) 
+                    self.client_state = False
