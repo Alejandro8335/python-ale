@@ -2,7 +2,7 @@ import network
 import socket
 import uasyncio
 from time import sleep_ms,sleep
-from machine import Pin
+from machine import Pin ,reset
 
 from server import Wifi_sta_server
 from hc_sr04 import HCSR04
@@ -29,7 +29,7 @@ async def Assembler(client):
     global there_is_client
     try:
         red_led_connect_state = Pin(23, Pin.OUT)
-        blue_led_recv_client = Pin(5, Pin.OUT)
+        blue_led_recv_client = Pin(4, Pin.OUT)
         red_led_connect_state.on()
         sta = Wifi_sta_server(client)
         uasyncio.create_task(sta.Recv_to_the_client())
@@ -75,6 +75,7 @@ async def Assembler(client):
         red_led_connect_state.off()
     finally:
         red_led_connect_state.off()
+        reset()
 async def Main():
     global there_is_client
     try:

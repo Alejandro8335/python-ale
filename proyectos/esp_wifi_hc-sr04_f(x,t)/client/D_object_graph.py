@@ -12,21 +12,29 @@ class Graph():
         self.open_state = False
         self.data_consumer_state = False
     def Graph_open(self):
-        if not self.open_state:
-            self.fig, self.ax = plt.subplots()
-            self.line, = self.ax.plot([], [], lw=2)
-            plt.title("Gráfico de distancia")
-            plt.xlabel("Tiempo")
-            plt.ylabel("Valor")
-            self.animacion = FuncAnimation(self.fig, self.Update_frame, interval=200, cache_frame_data=False)
-            plt.show(block=False)
-            self.open_state = True
-    
+        try:
+            if not self.open_state:
+                self.fig, self.ax = plt.subplots()
+                self.line, = self.ax.plot([], [], lw=2)
+                plt.title("Gráfico de distancia")
+                plt.xlabel("Tiempo")
+                plt.ylabel("Valor")
+                self.animacion = FuncAnimation(self.fig, self.Update_frame, interval=200, cache_frame_data=False)
+                plt.show(block=False)
+                self.open_state = True
+            return True
+        except Exception as e:
+            print(e)
+            return False
     def Graph_close(self):
-        if self.open_state:
-            plt.close(self.fig)
-            self.open_state = False
-    
+        try:
+            if self.open_state:
+                plt.close(self.fig)
+                self.open_state = False
+            return True
+        except Exception as e:
+            print(e)
+            return False
     def Update_frame(self,frame):
         self.line.set_data(self.X_data, self.Y_data)
             
@@ -44,13 +52,15 @@ class Graph():
                         data = await self.queue.get()
                         print(data)
                         if data is None:  # señal de fin
-                            self.queue.task_done()
-                            break
+                            return True
                         else:
-                            self.X_data.append(time()-self.start_time)
-                            self.Y_data.append(round(float(data),5))
-                            self.queue.task_done()# es para el test y es opcional,
-                            # actualmente este codigo no lo usa
+                            try:
+                                data = round(float(data),5)
+                            except ValueError:
+                                print("Dato no numérico ignorado:", data)
+                            else:
+                                self.X_data.append(time()-self.start_time)
+                                self.Y_data.append(data)
                     except Exception as e:
                         self.data_consumer_state = False
                         print(e)

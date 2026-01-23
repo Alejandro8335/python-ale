@@ -1,36 +1,31 @@
 # pytest "C:\Users\gabri\OneDrive\Desktop\ALE\python-ale\proyectos\esp_wifi_hc-sr04_f(x,t)\client\test_client.py"
 import pytest
-import pytest_asyncio
 import asyncio
 from C_object_client import Client
 
-@pytest_asyncio.fixture(scope="module")
-def Pass_the_Client():
-    ESP_IP = "192.168.100.219"
-    ESP_PORT = (8080)
-    queue = asyncio.Queue()
-    client = Client(ESP_IP, ESP_PORT,queue)
-    yield queue ,client
-    
 @pytest.mark.asyncio
-async def test_Send_to_the_server(Pass_the_Client):
+async def test_Send_to_the_server_and_Recv_to_the_server():
     recv_task = None
     try:
-        queue ,client = Pass_the_Client
+        ESP_IP = "192.168.100.219"
+        ESP_PORT = (8080)
+        queue = asyncio.Queue()
+        client = Client(ESP_IP, ESP_PORT,queue)
         #conecion al servidor
-        await client.Connect()
-        assert client.connect_state is True
+        assert await client.Connect() is True and client.connect_state is True
         
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.5)
         
         recv_task = asyncio.create_task(client.Recv_to_the_server())
+        await asyncio.sleep(0.5)
         assert client.connect_state is True
+        assert client.def_recv_state is True
         
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.5)
         await client.Send_to_the_server(msj="Ale1524\n")
         assert client.connect_state is True
         
-        await asyncio.sleep(1)
+        await asyncio.sleep(0.5)
         
         try: 
             data = await asyncio.wait_for(queue.get(), timeout=180) # espera total 60s
@@ -46,6 +41,13 @@ async def test_Send_to_the_server(Pass_the_Client):
         if data == "Incorrect password":
             pytest.fail("The password is incorrect.")
 
+        assert client.Disconnect() is True
+        assert client.connect_state is False and client.def_recv_state is False
     finally:
-        client.Disconnect()
-        if recv_task:recv_task.cancel()
+        if recv_task and client.def_recv_state:
+            recv_task.cancel()
+            try:
+                await recv_task
+            except asyncio.CancelledError:
+                pass
+        if client and client.connect_state:client.Disconnect()

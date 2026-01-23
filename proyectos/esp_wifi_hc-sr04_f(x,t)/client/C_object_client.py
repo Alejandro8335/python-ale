@@ -15,40 +15,52 @@ class Client():
         try:
             if not self.connect_state and not self.def_connect_state:
                 self.def_connect_state = True
-                # create a socket object and set socker
-                self.socker = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.socker.setblocking(False)
+                # create a socket object and set socket
+                self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                self.socket.setblocking(False)
                 loop = asyncio.get_running_loop()
-                await loop.sock_connect(self.socker, (self.IP, self.PORT))
+                await loop.sock_connect(self.socket, (self.IP, self.PORT))
                 self.connect_state = True
                 self.def_connect_state = False
                 print("connect")
+                return True
         except Exception as e:
             self.def_connect_state = False
             self.connect_state = False
             print(e)
+            return False
             
     def Disconnect(self):
         try:
-            if self.connect_state:
-                self.socker.close()
-                self.connect_state = False
-                self.def_recv_state = False
+            if self.connect_state and self.socket:
+                try:
+                    self.socket.shutdown(socket.SHUT_RDWR)  # opcional: cierra lectura y escritura
+                except Exception:
+                    pass  # puede fallar si ya está cerrado
+                self.socket.close()
+                self.socket = None
                 print("disconnect")
+            # actualizar estados siempre
+            self.connect_state = False
+            self.def_recv_state = False
+            return True
         except Exception as e:
-            print(e)
-        
+            self.connect_state = False
+            self.def_recv_state = False
+            print("Error al desconectar:", e)
+            return False
+    
     # def the Send and Recv
     async def Send_to_the_server(self,msj):
         try:
             if self.connect_state:
                 async with self.send_lock: 
-                    await asyncio.get_running_loop().sock_sendall(self.socker, msj.encode())
+                    await asyncio.get_running_loop().sock_sendall(self.socket, msj.encode())
                     print("el mjs okey")
         except Exception as e:
             print(e)
             self.connect_state = False
-            self.socker.close()
+            self.Disconnect()
         
     async def Recv_to_the_server(self):
         loop = asyncio.get_running_loop()
@@ -61,13 +73,12 @@ class Client():
                     print("recv ok2")
                 while self.connect_state and self.def_recv_state:
                     try:
-                        data = await loop.sock_recv(self.socker, 1024)
-                        print("dataaaaaa")
+                        data = await loop.sock_recv(self.socket, 1024)
                         if not data: # pq quiere decir que el server cerro la conexión 
                             await self.queue.put(None)  # señal de fin
                             self.connect_state = False
                             self.def_recv_state = False
-                            break
+                            return True
                         buffer += data
                         while b"\n" in buffer:
                             line, buffer = buffer.split(b"\n", 1) 
@@ -80,8 +91,10 @@ class Client():
                             else: 
                                 await self.queue.put(text)
                     except Exception as e:
-                        print(e)
+                        print("Error en recv:", e)
+                        await self.queue.put(None)
                         self.connect_state = False
                         self.def_recv_state = False
+                        self.Disconnect()
             finally:
                 self.def_recv_state = False

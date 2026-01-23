@@ -12,3 +12,5 @@ etiqueta.pack()
 etiqueta.config(fg="blue",bg="yellow",font=("arial",12,"bold"))
 #bg es fondo y fg la letra
 ventana.mainloop()
+
+# Para leer el texto → label.cget("text").

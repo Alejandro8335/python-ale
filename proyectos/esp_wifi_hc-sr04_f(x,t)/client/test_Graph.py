@@ -15,15 +15,15 @@ def test_Graph_open(fixture_pass_obj_Graph):
     queue,graph = fixture_pass_obj_Graph
     if graph.open_state:
         pytest.fail("The window is open; the test cannot open another window.")
-    graph.Graph_open()
-    assert graph.open_state
+    return_open = graph.Graph_open()
+    assert graph.open_state and return_open is True
 
 def test_Graph_close(fixture_pass_obj_Graph):
     queue,graph = fixture_pass_obj_Graph
     if not graph.open_state:
         pytest.fail("The window is closed; the test cannot closed a window that does not exist.")
-    graph.Graph_close()
-    assert not graph.open_state
+    return_close = graph.Graph_close()
+    assert not graph.open_state and return_close is True
 
 @pytest_asyncio.fixture(scope="function")
 async def async_fixture_pass_obj_Graph():
@@ -38,10 +38,10 @@ async def test_2_put_in_Graph_Data_consumer(async_fixture_pass_obj_Graph):
         Data_consumer = asyncio.create_task(graph.Data_consumer())
         await asyncio.sleep(1)
         await queue.put(1)
-        await queue.join()
+        await asyncio.sleep(1)
         await asyncio.sleep(2)
         await queue.put(2)
-        await queue.join()
+        await asyncio.sleep(1)
         assert graph.X_data[0] >= float(1)
         assert graph.Y_data[0] == float(1)
         assert graph.X_data[1] >= float(2)
@@ -80,7 +80,7 @@ async def test_Graph_Data_consumer(async_fixture_pass_obj_Graph,tuple_of_datas):
         for input_sleep,input_queue,list_output_sleep,list_output_queue,data_consumer_state in tuple_of_datas:
                 await asyncio.sleep(input_sleep)
                 await queue.put(input_queue)
-                await queue.join()
+                await asyncio.sleep(1)
                 if data_consumer_state is True:
                     assert graph.X_data[-1] >= input_sleep
                     assert len(graph.X_data) == len(list_output_sleep)
@@ -90,7 +90,7 @@ async def test_Graph_Data_consumer(async_fixture_pass_obj_Graph,tuple_of_datas):
                     assert graph.Y_data == list_output_queue
                     assert graph.data_consumer_state is True
                 elif data_consumer_state is False:
-                    assert graph.data_consumer_state is False
+                    assert graph.data_consumer_state is False 
                 else:
                     pytest.fail("The data_consumer_state is not true or false")
     except Exception as e:

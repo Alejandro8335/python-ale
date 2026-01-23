@@ -49,3 +49,9 @@ for i in reversed(range(5)):
 # con range se puede mejor pero es solo un ejemplo
 for i in range(4,-1,-1): # va desde 4 hasta 0
     print(i)
+    
+
+for i in range(5):
+    if i == 3:break
+else:# se ejecuta si no hay ningun break
+    print("no se ejecuta")
