@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"name": "Mpy Remote Workspace",
+			"uri": "pico:"
+		},
+		{
+			"path": "../../../../cpp"
+		}
+	],
+	"settings": {
+		"python.analysis.typeshedPaths": [
+			"~/.micropico-stubs/micropython-esp32-stubs==1.17.post3"
+		],
+		"python.analysis.extraPaths": [
+			"~/.micropico-stubs/micropython-esp32-stubs==1.17.post3"
+		]
+	}
+}

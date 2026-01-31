@@ -8,8 +8,9 @@ cantidad_elementos = len(lista)
 lista.append("nuevo")
 
 #agregando un elemento a la lista en un indice en especifico
+print(lista)
 lista.insert(2,"nuevo2")
-
+print(lista)
 #agregando varios elementos a la lista 
 lista.extend((False,2020))
 
