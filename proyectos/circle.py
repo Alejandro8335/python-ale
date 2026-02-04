@@ -14,8 +14,8 @@ number_of_pixels = 21
 x = 0
 y = 0
 # el menos uno es pq va de 0 a 40 🤦
-x_center_circle = x + (number_of_pixels - 1) / 2
-y_center_circle = y + (number_of_pixels - 1) / 2
+x_center_circle = x + (number_of_pixels / 2) -1
+y_center_circle = y + (number_of_pixels / 2) -1
 radio = (number_of_pixels) / 2 -1 # -1 si no quiere llegar hasta los bordes
 
 dibujar_linea = ""

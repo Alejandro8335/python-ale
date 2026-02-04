@@ -28,5 +28,3 @@ a[::-1]  # invierte la secuencia -> [5,4,3,2,1,0]
 # |
 s = slice(1, 5, 2)
 a[s]     # equivalente a a[1:5:2]
-
-print(0*-1)

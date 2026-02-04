@@ -7,8 +7,17 @@ from unittest.mock import call
 client = Mock()
 client("esp32_ip", port=8080)
 client("esp32_ip2", port=9090)
+client("extra_ip", port=10000) # llamada adicional
 
 client.assert_has_calls([
     call("esp32_ip", port=8080),
     call("esp32_ip2", port=9090)
 ])   # ✅ pasa
+
+# Si quieres que sean exactamente esas llamadas
+
+assert client.mock_calls == [
+    call("esp32_ip", port=8080),
+    call("esp32_ip2", port=9090)
+]
+# Esto sí falla si hay llamadas de más o de menos.

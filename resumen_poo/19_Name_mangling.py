@@ -30,7 +30,7 @@ s.llamar()          # sigue imprimiendo "Base secreto"
 # Acceso directo (no recomendado) al método mangled:
 b._Base__secreto()  # imprime "Base secreto"
 s._Sub__secreto()   # imprime "Sub secreto"
-
+s._Base__secreto()  # imprime "Base secreto"
 
 # El objeto b sigue siendo la instancia de Base.
 
@@ -46,4 +46,4 @@ s._Sub__secreto()   # imprime "Sub secreto"
 def secreto():print("secreto desde afuera")
 
 b._Base__secreto = secreto
-b._Base__secreto()
+b._Base__secreto()  # secreto desde afuera
