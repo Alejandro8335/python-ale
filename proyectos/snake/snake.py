@@ -39,76 +39,48 @@ class Snake:
         
         if self._size_snake == 1:pass
         elif self.__snake_direction == 0:
-            for i in range(1,self._size_snake):self._list_snake.append((x,y + (self._size_snake*i)))
+            for i in range(1,self._size_snake):self._list_snake.append((x,y + (self.__size_tile * i)))
             if self._list_snake[-1][1] + self.__size_tile > self.__windows_size_y:raise ValueError("Snake body out of bounds: Y position is greater than window height.")
         elif self.__snake_direction == 1:
-            for i in range(1,self._size_snake):self._list_snake.append((x - (self._size_snake*i),y))
+            for i in range(1,self._size_snake):self._list_snake.append((x - (self.__size_tile * i),y))
             if self._list_snake[-1][0] < 0:raise ValueError("Snake body out of bounds: X position is less than zero.")
         elif self.__snake_direction == 2:
-            for i in range(1,self._size_snake):self._list_snake.append((x,y - (self._size_snake*i)))
+            for i in range(1,self._size_snake):self._list_snake.append((x,y - (self.__size_tile * i)))
             if self._list_snake[-1][1] < 0:raise ValueError("Snake body out of bounds: Y position is less than zero.")
         elif self.__snake_direction == 3:
-            for i in range(1,self._size_snake):self._list_snake.append((x + (self._size_snake*i),y))
+            for i in range(1,self._size_snake):self._list_snake.append((x + (self.__size_tile * i),y))
             if self._list_snake[-1][0] + self.__size_tile> self.__windows_size_x :raise ValueError("Snake body out of bounds: X position is greater than window width.")
         
-    def Snake_Create_rectangle(self,x,y,w,h,color):raise NotImplementedError
-    def Timer():raise NotImplementedError # the function must return true or false
+    def Snake_Create_rectangle(self,x,y,w,h,color,window):raise NotImplementedError
+    def Timer(self):raise NotImplementedError # the function must return true or false
     def Snake_movement(self,direction_of_movement):# 0 = top / 1 = right / 2 = bottom / 3 = left
         if self.Timer():
-            if direction_of_movement not in [0,1,2,3,None]:raise ValueError("Invalid direction: must be 0 (up), 1 (right), 2 (down), or 3 (left), or None (do not change direction).")
+            if direction_of_movement not in [0, 1, 2, 3, None]:
+                raise ValueError("Invalid direction: must be 0 (up), 1 (right), 2 (down), or 3 (left), or None.")
+
             if (self.__snake_direction + 2) % 4 == direction_of_movement:
                 direction_of_movement = None
+
+            if direction_of_movement is None:
+                direction_of_movement = self.__snake_direction
+
             match direction_of_movement:
-                case None:
-                    match self.__snake_direction:
-                        case 0:
-                            self.__y -= self.__size_tile
-                            if self.__y < 0:
-                                self._live = False
-                            self.__snake_direction = 0
-                            self._list_snake.insert(0,(self.__x,self.__y))
-                        case 1:
-                            self.__x += self.__size_tile
-                            if self.__x > self.__windows_size_x:
-                                self._live = False
-                            self.__snake_direction = 1
-                            self._list_snake.insert(0,(self.__x,self.__y))
-                        case 2:
-                            self.__y += self.__size_tile
-                            if self.__y > self.__windows_size_y:
-                                self._live = False
-                            self.__snake_direction = 2
-                            self._list_snake.insert(0,(self.__x,self.__y))
-                        case 3:
-                            self.__x -= self.__size_tile
-                            if self.__x < 0:
-                                self._live = False
-                            self.__snake_direction = 3
-                            self._list_snake.insert(0,(self.__x,self.__y))
                 case 0:
                     self.__y -= self.__size_tile
-                    if self.__y < 0:
-                        self._live = False
-                    self.__snake_direction = 0
-                    self._list_snake.insert(0,(self.__x,self.__y))
                 case 1:
                     self.__x += self.__size_tile
-                    if self.__x > self.__windows_size_x:
-                        self._live = False
-                    self.__snake_direction = 1
-                    self._list_snake.insert(0,(self.__x,self.__y))
                 case 2:
                     self.__y += self.__size_tile
-                    if self.__y > self.__windows_size_y:
-                        self._live = False
-                    self.__snake_direction = 2
-                    self._list_snake.insert(0,(self.__x,self.__y))
                 case 3:
                     self.__x -= self.__size_tile
-                    if self.__x < 0:
-                        self._live = False
-                    self.__snake_direction = 3
-                    self._list_snake.insert(0,(self.__x,self.__y))
+
+            if (self.__x < 0 or self.__x >= self.__windows_size_x or
+                self.__y < 0 or self.__y >= self.__windows_size_y):
+                self._live = False
+            else:
+                self.__snake_direction = direction_of_movement
+                self._list_snake.insert(0, (self.__x, self.__y))
+
     def Snake_update(self):
         for tuple_positions in self._list_snake[1:]:
             if self._list_snake[0] == tuple_positions:
@@ -117,7 +89,7 @@ class Snake:
         
         while len(self._list_snake) > self._size_snake:
             x ,y = self._list_snake.pop(-1)
-            if self.__second_color_BG is None or ((x // self.__size_tile) % 2 == 0 and (y // self.__size_tile) % 2 == 0):
+            if self.__second_color_BG is None or (((x // self.__size_tile) + (y // self.__size_tile)) % 2 == 0 ):
                 self.Snake_Create_rectangle(x,y,self.__size_tile,self.__size_tile,self.__color_BG)
             else:
                 self.Snake_Create_rectangle(x,y,self.__size_tile,self.__size_tile,self.__second_color_BG)

@@ -79,7 +79,104 @@ def test__init__():
         snake = Snake(6,6,3,3,None,None,12,12,None,3)
         
     snake = Snake(6,6,3,2,None,None,12,12,None,3,None)
-    
+
+def test_direction_0_creates_segments_downwards():
+    size_tile = 20
+    x, y = 40, 40
+    size_snake = 3
+    win_x = win_y = 200
+    s = Snake(x, y, size_tile, size_snake, None, None, win_x, win_y, None, 0, None)
+    expected = [
+        (x, y),
+        (x, y + size_tile * 1),
+        (x, y + size_tile * 2),
+    ]
+    assert s._list_snake == expected
+
+def test_direction_1_creates_segments_leftwards():
+    size_tile = 20
+    x, y = 80, 40
+    size_snake = 3
+    win_x = win_y = 200
+    s = Snake(x, y, size_tile, size_snake, None, None, win_x, win_y, None, 1,None)
+    expected = [
+        (x, y),
+        (x - size_tile * 1, y),
+        (x - size_tile * 2, y),
+    ]
+    assert s._list_snake == expected
+
+def test_direction_2_creates_segments_upwards():
+    size_tile = 20
+    x, y = 80, 80
+    size_snake = 3
+    win_x = win_y = 200
+    s = Snake(x, y, size_tile, size_snake, None, None, win_x, win_y, None, 2, None)
+    expected = [
+        (x, y),
+        (x, y - size_tile * 1),
+        (x, y - size_tile * 2),
+    ]
+    assert s._list_snake == expected
+
+def test_direction_3_creates_segments_rightwards():
+    size_tile = 20
+    x, y = 40, 40
+    size_snake = 3
+    win_x = win_y = 200
+    s = Snake(x, y, size_tile, size_snake, None, None, win_x, win_y, None, 3, None)
+    expected = [
+        (x, y),
+        (x + size_tile * 1, y),
+        (x + size_tile * 2, y),
+    ]
+    assert s._list_snake == expected
+
+def test_size_one_keeps_single_segment():
+    size_tile = 20
+    x, y = 40, 40
+    size_snake = 1
+    win_x = win_y = 200
+    s = Snake(x, y, size_tile, size_snake, None, None, win_x, win_y, None, 0, None)
+    assert s._list_snake == [(x, y)]
+
+# Tests para los errores de límites provocados por los for
+def test_direction_0_out_of_bounds_raises():
+    size_tile = 20
+    x, y = 40, 60
+    size_snake = 5
+    win_x = 200
+    win_y = 100  # suficientemente pequeño para provocar overflow
+    with pytest.raises(ValueError):
+        Snake(x, y, size_tile, size_snake, None, None, win_x, win_y, None, 0, None)
+
+def test_direction_1_out_of_bounds_raises_negative_x():
+    size_tile = 20
+    x, y = 0, 40
+    size_snake = 2
+    win_x = win_y = 200
+    with pytest.raises(ValueError):
+        Snake(x, y, size_tile, size_snake, None, None, win_x, win_y, None, 1, None)
+
+def test_direction_2_out_of_bounds_raises_negative_y():
+    size_tile = 20
+    x, y = 40, 0
+    size_snake = 2
+    win_x = win_y = 200
+    with pytest.raises(ValueError):
+        Snake(x, y, size_tile, size_snake, None, None, win_x, win_y, None, 2, None)
+
+def test_direction_3_out_of_bounds_raises_overflow_x():
+    size_tile = 20
+    x, y = 80, 40
+    size_snake = 2
+    win_x = 100  # provocará que el último segmento + size_tile > win_x
+    win_y = 200
+    with pytest.raises(ValueError):
+        Snake(x, y, size_tile, size_snake, None, None, win_x, win_y, None, 3, None)
+
+
+###################################################################################################################################
 def test_Snake_movement():
     snake = Snake(0,0,3,2,None,None,12,12,None,0)
     snake.Timer = lambda: True
@@ -88,10 +185,10 @@ def test_Snake_movement():
     
     # 0
     snake._Snake__snake_direction = 0
-    snake._Snake__x = 0 ;snake._Snake__y = 0
+    snake._Snake__x = 6 ;snake._Snake__y = 6
     snake.Snake_movement(2)
     assert snake._Snake__snake_direction == 0
-    assert snake._list_snake[0] == (0,-3)
+    assert snake._list_snake[0] == (6,3)
     
     # 1
     snake._Snake__snake_direction = 1
@@ -109,10 +206,10 @@ def test_Snake_movement():
     
     # 3
     snake._Snake__snake_direction = 3
-    snake._Snake__x = 0 ;snake._Snake__y = 0
+    snake._Snake__x = 6 ;snake._Snake__y = 6
     snake.Snake_movement(1)
     assert snake._Snake__snake_direction == 3
-    assert snake._list_snake[0] == (-3,0)
+    assert snake._list_snake[0] == (3,6)
     
     ############################################################################
     
@@ -120,10 +217,10 @@ def test_Snake_movement():
     
     # 0
     snake._Snake__snake_direction = 1
-    snake._Snake__x = 0 ;snake._Snake__y = 0
+    snake._Snake__x = 6 ;snake._Snake__y = 6
     snake.Snake_movement(0)
     assert snake._Snake__snake_direction == 0
-    assert snake._list_snake[0] == (0,-3)
+    assert snake._list_snake[0] == (6,3)
     
     # 1
     snake._Snake__snake_direction = 2
@@ -141,10 +238,10 @@ def test_Snake_movement():
 
     # 3
     snake._Snake__snake_direction = 0
-    snake._Snake__x = 0 ;snake._Snake__y = 0
+    snake._Snake__x = 6 ;snake._Snake__y = 6
     snake.Snake_movement(3)
     assert snake._Snake__snake_direction == 3
-    assert snake._list_snake[0] == (-3,0)
+    assert snake._list_snake[0] == (3,6)
 
 def test_Snake_update_collisions():
     snake = Snake(0,0,3,1,0,1,12,12,2,0,3)
@@ -178,11 +275,11 @@ def test_Snake_update_while_Snake_Create_rectangle_color_BG_and_second_color_BG(
     # second_color_BG
     snake._size_snake = 1
     snake.Snake_Create_rectangle.reset_mock()
-    snake._list_snake = [(0,0),(3,3)]
+    snake._list_snake = [(0,0),(0,3)]
     snake.Snake_update()
     
     assert len(snake._list_snake) == 1
-    snake.Snake_Create_rectangle.assert_has_calls([call(3,3,3,3,3)])
+    snake.Snake_Create_rectangle.assert_has_calls([call(0,3,3,3,3)])
     
     # color_BG and size_snake = 2
     snake._size_snake = 2
@@ -194,20 +291,20 @@ def test_Snake_update_while_Snake_Create_rectangle_color_BG_and_second_color_BG(
     # second_color_BG and size_snake = 2
     snake._size_snake = 2
     snake.Snake_Create_rectangle.reset_mock()
-    snake._list_snake = [(0,0),(6,6),(3,3)]
+    snake._list_snake = [(0,0),(0,6),(0,3)]
     snake.Snake_update()
     
     assert len(snake._list_snake) == 2
-    snake.Snake_Create_rectangle.assert_has_calls([call(3,3,3,3,3)])
+    snake.Snake_Create_rectangle.assert_has_calls([call(0,3,3,3,3)])
     
     # color_BG and second_color_BG
     snake._size_snake = 1
     snake.Snake_Create_rectangle.reset_mock()
-    snake._list_snake = [(0,0),(3,3),(6,6)]
+    snake._list_snake = [(0,0),(0,3),(0,6)]
     snake.Snake_update()
     
     assert len(snake._list_snake) == 1
-    snake.Snake_Create_rectangle.assert_has_calls([call(6,6,3,3,2),call(3,3,3,3,3)])
+    snake.Snake_Create_rectangle.assert_has_calls([call(0,6,3,3,2),call(0,3,3,3,3)])
     
 def test_Snake_update_Snake_Create_rectangle_snake():
     snake = Snake(0,0,3,4,0,1,15,15,2,0,3)

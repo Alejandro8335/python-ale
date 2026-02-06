@@ -15,7 +15,7 @@ class Apples:
         if not isinstance(self.__num_tiles_y,int):
             raise ValueError("Invalid num_tiles_y: must be a integer")
         
-    def Random(self):raise NotImplementedError
+    def Random(self,max_random_value):raise NotImplementedError
     def Apples_draw_pixels(self,x,y,color):raise NotImplementedError
     def Apples_Create(self,tuple_x_and_y):
         self.list_x_y_apples.append((tuple_x_and_y))

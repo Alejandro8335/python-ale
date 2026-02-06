@@ -1,0 +1,16 @@
+# colors
+BLUE        = (0, 0, 255)
+BLACK       = (0,0,0)
+LIGHT_GREEN = (144, 238, 144)
+DARK_GREEN  = (0, 128, 0)
+RED         = (255, 0, 0)
+COLOR_BG    = (60,50,60)
+
+# window
+TILE_SIZE = 40
+NUM_TILE = 12
+WINDOW_SIZE  = 480
+
+MOVE_COOLDOWN = 150
+APPLES_CREATE_COOLDOWN = 4000
+FPS = 60
