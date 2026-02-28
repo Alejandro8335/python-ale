@@ -34,6 +34,8 @@ print(D.mro())
 #####################################################################################################################
 # super() = “delegar la llamada al siguiente método en la cadena de resolución (MRO)”.
 
+# “Yo ya inicialicé lo mío, que el resto de la jerarquía haga lo suyo”.
+
 #####################################################################################################################
 # Cuando invocás super().función(), Python no salta directamente a la clase padre inmediata, 
 # sino que arranca la búsqueda en la siguiente clase del MRO respecto de la clase actual.

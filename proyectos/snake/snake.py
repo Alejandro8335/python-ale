@@ -1,9 +1,7 @@
 # minimo tiene que ser un 3x3 el tile 
 class Snake:
-    def __init__(self,x,y,size_tile,size_snake,color_snake,color_eyes,windows_size_x,windows_size_y,color_BG,snake_direction = 0,second_color_BG = None):
+    def __init__(self,x,y,size_tile,size_snake,color_snake,color_eyes,windows_size_x,windows_size_y,snake_direction = 0):
         self._live = True
-        self.__color_BG = color_BG
-        self.__second_color_BG = second_color_BG
         self.__color_snake = color_snake
         self.__color_eyes = color_eyes
         self.__size_eyes = size_tile // 3
@@ -51,7 +49,7 @@ class Snake:
             for i in range(1,self._size_snake):self._list_snake.append((x + (self.__size_tile * i),y))
             if self._list_snake[-1][0] + self.__size_tile> self.__windows_size_x :raise ValueError("Snake body out of bounds: X position is greater than window width.")
         
-    def Snake_Create_rectangle(self,x,y,w,h,color,window):raise NotImplementedError
+    def Snake_Create_rectangle(self,x,y,w,h,color):raise NotImplementedError
     def Timer(self):raise NotImplementedError # the function must return true or false
     def Snake_movement(self,direction_of_movement):# 0 = top / 1 = right / 2 = bottom / 3 = left
         if self.Timer():
@@ -81,22 +79,20 @@ class Snake:
                 self.__snake_direction = direction_of_movement
                 self._list_snake.insert(0, (self.__x, self.__y))
 
-    def Snake_update(self):
+    def Snake_check_Collision(self):
         for tuple_positions in self._list_snake[1:]:
             if self._list_snake[0] == tuple_positions:
                 self._live = False
                 return
-        
+    
+    def Snake_update_body(self):
         while len(self._list_snake) > self._size_snake:
             x ,y = self._list_snake.pop(-1)
-            if self.__second_color_BG is None or (((x // self.__size_tile) + (y // self.__size_tile)) % 2 == 0 ):
-                self.Snake_Create_rectangle(x,y,self.__size_tile,self.__size_tile,self.__color_BG)
-            else:
-                self.Snake_Create_rectangle(x,y,self.__size_tile,self.__size_tile,self.__second_color_BG)
             
         for x,y in self._list_snake:
             self.Snake_Create_rectangle(x,y,self.__size_tile,self.__size_tile,self.__color_snake)
-            
+    
+    def Snake_update_eyes(self):
         x ,y = self._list_snake[0]
         match self.__snake_direction:
             case 0:

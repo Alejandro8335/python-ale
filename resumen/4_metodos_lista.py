@@ -43,3 +43,57 @@ print(id(a), id(b))
 colores = ["rojo", "azul", "rojo", "verde", "rojo"]
 resultado = colores.count("rojo")   # Resultado: 3
 print(lista)
+
+
+# Diferencia entre append y += en listas de Python
+# ------------------------------------------------
+
+bar = ["hola", "mundo"]
+
+# 1. append()
+# ¿Qué es?
+# -> Agrega UN solo elemento al final de la lista.
+# -> Ese elemento puede ser cualquier objeto: string, número, lista, etc.
+# -> Siempre añade el objeto completo como una única entrada.
+
+bar.append("adios")
+print(bar)
+# Resultado: ['hola', 'mundo', 'adios']
+
+bar.append(["python", "listas"])
+print(bar)
+# Resultado: ['hola', 'mundo', 'adios', ['python', 'listas']]
+# Nota: se agregó una lista como un solo elemento dentro de la lista principal.
+
+
+# 2. += (concatenación)
+# ¿Qué es?
+# -> Une la lista original con otra lista.
+# -> Agrega cada elemento de la lista de la derecha como elementos individuales.
+# -> Es equivalente a usar extend().
+
+bar = ["hola", "mundo"]
+bar += ["adios"]
+print(bar)
+# Resultado: ['hola', 'mundo', 'adios']
+
+bar += ["python", "listas"]
+print(bar)
+# Resultado: ['hola', 'mundo', 'adios', 'python', 'listas']
+# Nota: aquí cada string se agregó como elemento separado, no como una lista dentro.
+
+
+# Conclusión:
+# - append(x) -> añade x como un único elemento al final.
+# - += [x, y] -> añade cada elemento de la lista a la lista original.
+
+# Ejemplo válido: concatenación con + 
+lista1 = [1, 2] 
+lista2 = [3, 4] 
+print(lista1 + lista2) 
+# Resultado: [1, 2, 3, 4] 
+
+# Ejemplo válido: repetición con * 
+lista = ["hola"] 
+print(lista * 3) 
+# Resultado: ['hola', 'hola', 'hola']

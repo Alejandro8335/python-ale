@@ -1,4 +1,4 @@
-from apple import Apples
+from snake.apple import Apples
 import pytest
 from unittest.mock import patch
 from unittest.mock import Mock
@@ -16,7 +16,23 @@ def test_Apples__init__():
         apples = Apples(3,None,[],1,1.5)
     apples = Apples(3,None,[],10,10)
 
-def test_Apples_Create_pair_size_tile():
+def test_Apples_Create():
+    apples = Apples(41,None,[],10,10)
+    
+    apples.Apples_random = Mock()
+    apples.Apples_random.return_value = (4,6)
+    
+    apples.Timer = Mock()
+    apples.Timer.return_value = True
+    
+    apples.Apples_Create()
+    assert apples.list_x_y_apples == [(4,6)]
+    
+    apples.Apples_random.return_value = (3,5)
+    apples.Apples_Create()
+    assert apples.list_x_y_apples == [(4,6),(3,5)]
+    
+def test_Apples_update_pair_size_tile():
     size_tile = 41
     apples = Apples(size_tile,None,[],10,10)
     
@@ -24,8 +40,14 @@ def test_Apples_Create_pair_size_tile():
     
     with patch.object(Apples, "Apples_draw_pixels") as def_mock:    
         x = 0;y = 0
-        apples.Apples_Create((x,y))
+        apples.Apples_random = Mock()
+        apples.Apples_random.return_value = (x,y)
         
+        apples.Timer = Mock()
+        apples.Timer.return_value = True
+        
+        apples.Apples_Create()
+        apples.Apples_update()
         list_added_positions_apples = [tuple(call.args[-3:]) for call in def_mock.call_args_list]
 
         assert len(apples.list_x_y_apples) == 1
@@ -50,7 +72,7 @@ def test_Apples_Create_pair_size_tile():
         assert list_apples[0] == list_expected[0]
         assert list_apples[1] == list_expected[1]
         
-def test_Apples_Create_odd_size_tile():
+def test_Apples_update_odd_size_tile():
     size_tile = 40
     apples = Apples(size_tile,None,None,10,10)
     
@@ -58,7 +80,14 @@ def test_Apples_Create_odd_size_tile():
     
     with patch.object(Apples, "Apples_draw_pixels") as def_mock:    
         x = 0;y = 0
-        apples.Apples_Create((x,y))
+        apples.Apples_random = Mock()
+        apples.Apples_random.return_value = (x,y)
+        
+        apples.Timer = Mock()
+        apples.Timer.return_value = True
+    
+        apples.Apples_Create()
+        apples.Apples_update()
         
         list_added_positions_apples = [tuple(call.args[-3:]) for call in def_mock.call_args_list]
 

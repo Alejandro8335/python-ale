@@ -12,3 +12,7 @@ m.obtener.return_value = {"ok": True}
 
 print(m.obtener())   # → {"ok": True}
 print(m.obtener())   # → {"ok": True}  # siempre lo mismo
+print(m.obtener)     # → <Mock name='mock.obtener' id='1839095725568'>
+
+# Clase → mock_Clase
+# Instancia → mock_Clase.return_value

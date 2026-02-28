@@ -1,58 +1,89 @@
-# patch
-# Sirve para parchear un atributo (función, clase, objeto) dentro de un módulo durante el 
-# alcance del test.
+# ¿Qué es patch?
 
-# Se usa como decorador o context manager.
+# patch reemplaza temporalmente un atributo (función, clase, variable u objeto) dentro del namespace de un módulo durante el alcance del test.
 
-# Cuando termina el test, el parche se revierte automáticamente.
+# Cuando el test termina, el valor original se restaura automáticamente.
 
-# Ejemplo con patch como decorador
+# 📌 Regla de oro:
 
+# Patch where it is looked up, not where it is defined.
+
+#========================================================================================================================
+# modulo.__dict__["nombre"] = Mock()
+
+#========================================================================================================================
 from unittest.mock import patch
 
-# Supongamos que tenemos un módulo "servicio" con una función "obtener_datos"
 @patch("servicio.obtener_datos")
 def test_funcion(mock_obtener):
     mock_obtener.return_value = {"ok": True}
-    resultado = mock_obtener()
-    print(resultado)   # → {"ok": True}
     
-# Ejemplo con patch como context manager
+    resultado = mock_obtener()
+    
+    assert resultado == {"ok": True}
+
+# Qué pasó aquí:
+
+# servicio.obtener_datos fue reemplazado por un Mock
+
+# mock_obtener es ese Mock
+
+# Cuando termina el test → se revierte automáticamente
+
+#========================================================================================================================
+# util cuando querés controlar el alcance manualmente:
+
+from unittest.mock import patch
 
 with patch("servicio.obtener_datos") as mock_obtener:
     mock_obtener.return_value = {"ok": True}
-    print(mock_obtener())   # → {"ok": True}
-    
-############################################################################
-# 🔹 patch.object
-# Similar a patch, pero en lugar de dar la ruta completa (modulo.funcion), 
-# se aplica directamente sobre un objeto/clase ya importado.
+    print(mock_obtener())
 
-# Útil cuando ya tienes la referencia del objeto y quieres modificar uno de sus atributos.
+# Sale del with → vuelve el original.
 
-# Ejemplo con patch.object
+#========================================================================================================================
+# Si el código a testear está en app.py:
 
+# app.py
+# from servicio import obtener_datos
+
+# def ejecutar():
+#     return obtener_datos()
+
+# Entonces el patch correcto es:
+
+# @patch("app.obtener_datos")
+
+# Porque ejecutar() busca en el namespace de app.
+
+#========================================================================================================================
+# Se usa cuando ya tenés la referencia del objeto o clase.
+
+# En vez de pasar una ruta como string, pasás el objeto directamente.
+
+# Ejemplo con clase
 from unittest.mock import patch
 
 class Servicio:
     def obtener_datos(self):
         return {"real": True}
 
-# Parcheamos el método en la clase
 with patch.object(Servicio, "obtener_datos", return_value={"mock": True}):
     s = Servicio()
-    print(s.obtener_datos())   # → {"mock": True}
-    
-############################################################################
+    print(s.obtener_datos())
 
-# ⚖️ Diferencia clave
-# patch: se usa con la ruta completa "modulo.nombre".
+# Salida:
 
-# patch.object: se usa directamente sobre un objeto/clase ya importado.
+{"mock": True}
 
-############################################################################
+#========================================================================================================================
+# El orden de los mocks en decoradores
 
-# Mock/MagicMock: los usas cuando controlas la dependencia (la pasas como argumento).
+# El mock más cercano a la función es el primer parámetro.
 
-# patch/patch.object: los usas cuando necesitas interceptar algo que el código ya importa/usa internamente, 
-# sin modificarlo.
+@patch("modulo.A")
+@patch("modulo.B")
+def test(mock_B, mock_A):
+    pass
+
+# Se pasan en orden inverso.

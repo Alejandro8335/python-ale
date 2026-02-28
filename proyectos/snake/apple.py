@@ -17,17 +17,21 @@ class Apples:
         
     def Random(self,max_random_value):raise NotImplementedError
     def Apples_draw_pixels(self,x,y,color):raise NotImplementedError
-    def Apples_Create(self,tuple_x_and_y):
-        self.list_x_y_apples.append((tuple_x_and_y))
-        x,y = tuple_x_and_y
-        x_center_circle = x + (self.__size_tile / 2) -1
-        y_center_circle = y + (self.__size_tile / 2) -1
-        radio = (self.__size_tile) / 2 -1
-        for y_for in range(y,y + self.__size_tile):
-            for x_for in range(x,x + self.__size_tile):
-                if (x_for - x_center_circle)**2 + (y_for - y_center_circle)**2 < (radio)**2:
-                    self.Apples_draw_pixels(x_for,y_for,self.__color_apples)
-    
+    def Timer(self):raise NotImplementedError # the function must return true or false
+    def Apples_Create(self):
+        if self.Timer():
+            self.list_x_y_apples.append(self.Apples_random())
+        
+    def Apples_update(self):
+        for x ,y in self.list_x_y_apples:
+            x_center_circle = x + (self.__size_tile / 2) -1
+            y_center_circle = y + (self.__size_tile / 2) -1
+            radio = (self.__size_tile) / 2 -1
+            for y_for in range(y,y + self.__size_tile):
+                for x_for in range(x,x + self.__size_tile):
+                    if (x_for - x_center_circle)**2 + (y_for - y_center_circle)**2 < (radio)**2:
+                        self.Apples_draw_pixels(x_for,y_for,self.__color_apples)
+
     def Apples_random(self):
         list_tiles_available = self.__Remove_tiles_that_are_in_use()
         return list_tiles_available[self.Random(len(list_tiles_available))]

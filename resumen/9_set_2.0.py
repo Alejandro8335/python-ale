@@ -27,3 +27,11 @@ print(resultado_4)
 
 # lo principal de un set es que no permite que halla el mismo elemento esto es 
 # la clave de los dicconarios pq permite que no halla la misma key
+
+####################################################################################
+
+# -> Si queremos "restar" elementos, podemos usar conjuntos (set): 
+lista1 = [1, 2, 3, 4] 
+lista2 = [2, 4] 
+print(set(lista1) - set(lista2)) 
+# Resultado: {1, 3} -> elementos de lista1 que no están en lista2
